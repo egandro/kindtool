@@ -4,7 +4,7 @@ import os
 from subprocess import check_output
 from typing import Any, Dict
 
-from kindtool import templates
+from kindtool import __version__, templates
 
 class CmdCreate:
     def __init__(self, tpl: templates.Templates) -> None:
@@ -13,18 +13,20 @@ class CmdCreate:
 
     def create_content(self) -> str:
         result = ""
-        try:
-            cfg_data = self._get_kindfile_data()
-            self._render_tpl_configs(cfg_data)
-            self._copy_configs()
-        except Exception as err:
-            result = repr(err)
+        #try:
+        cfg_data = self._get_kindfile_data()
+        self._render_tpl_configs(cfg_data)
+        self._copy_configs()
+        #except Exception as err:
+        #    result = repr(err)
         return result
 
     def _render_tpl_configs(self, cfg_data: dict[str, str]) -> None:
-        self._tpl.render_template(cfg_data, "j2/config.j2.yaml", "config")
-        #if self._cfg.internal_registry():
-        #    self._tpl.render_template(cfg_data, "localregistry.j2.yaml", "config", "localregistry.yaml")
+        self._tpl.render_template(cfg_data, "j2/config.j2.yaml", ".kind/config")
+        if self._cfg.getboolean("internal_registry"):
+            self._tpl.render_template(cfg_data, "j2/internal-registry-connect.j2.sh", ".kind/scripts")
+            self._tpl.render_template(cfg_data, "j2/internal-registry-create.j2.sh", ".kind/scripts")
+            self._tpl.render_template(cfg_data, "j2/internal-registry.j2.yaml", ".kind/config")
         return None
 
     def _copy_configs(self) -> None:
@@ -59,13 +61,14 @@ class ClusterConfig:
         key = "cluster_name"
         self._parser.set(self._section, key, self.get(key, "kind"))
 
-        key = "internal_registry_name"
-        self._parser.set(self._section, key,
-            self.get(key, self.get("clustername", "") + "_registry")
-        )
-
-        key = "internal_registry_port"
-        self._parser.set(self._section, key, str(self.getint(key, 5001)))
+        key = "internal_registry"
+        if self.getboolean(key):
+            key = "internal_registry_name"
+            self._parser.set(self._section, key,
+                self.get(key, self.get("cluster_name", "") + "_registry")
+            )
+            key = "internal_registry_port"
+            self._parser.set(self._section, key, str(self.getint(key, 5001)))
 
         key = "ingress"
         if self.getboolean(key):
@@ -76,6 +79,9 @@ class ClusterConfig:
 
         key = "worker_nodes"
         self._parser.set(self._section, key, str(self.getint(key, 0)))
+
+        # inject out version
+        self._parser.set(self._section, "kindtool_version", __version__)
 
 
     def data(self) -> dict[str, str]:
@@ -127,13 +133,14 @@ class ClusterConfig:
         value = self.get(key, "")
         if not value:
             value = os.path.realpath(os.path.join(self._tpl.get_dest_dir(), ".kind/config"))
-            self._parser.set(self._section, key, value)
+        #value = os.path.abspath(value)
+        self._parser.set(self._section, key, value)
 
     def _update_mount_dir(self) -> str:
         key = "mount_dir"
         value = self.get(key, "")
         if not value:
-            value = os.path.realpath(os.path.join(self._tpl.get_dest_dir(), "data"))
+            value = os.path.realpath(os.path.join(self._tpl.get_dest_dir(), ".kind/data"))
             self._parser.set(self._section, key, value)
 
     def _update_api_server_address(self) -> str:
