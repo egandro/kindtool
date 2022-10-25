@@ -6,7 +6,7 @@ import os
 
 import typer
 
-from kindtool import __app_name__, __version__, cmdcreate, cmdinit, templates
+from kindtool import __app_name__, __version__, cmdinit, cmdup, templates
 
 app = typer.Typer()
 
@@ -40,11 +40,11 @@ def init(ctx: typer.Context) -> None:
     context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
     help="Creates a new deployment based on an initalized directory."
 )
-def create(ctx: typer.Context) -> None:
+def up(ctx: typer.Context) -> None:
     dest_dir=get_dest_dir(ctx)
     tpl = templates.Templates(dest_dir=dest_dir)
-    create = cmdcreate.CmdCreate(tpl)
-    is_valid(create.create_content())
+    up = cmdup.CmdUp(tpl)
+    is_valid(up.run())
     return None
 
 def _version_callback(value: bool) -> None:

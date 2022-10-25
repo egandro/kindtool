@@ -17,7 +17,7 @@ test-dind: sdist
 
 run-kindtool:
 	if [ ! -d "./build/" ]; then cd src && python3 -m kindtool init ../build; fi
-	cd src && python3 -m kindtool create ../build
+	cd src && python3 -m kindtool up ../build
 
 sdist:
 	rm -rf dist

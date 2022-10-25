@@ -6,41 +6,30 @@ from typing import Any, Dict
 
 from kindtool import __version__, templates
 
-class CmdCreate:
+class Kindfile:
     def __init__(self, tpl: templates.Templates) -> None:
         self._tpl = tpl
         self._cfg = ClusterConfig(tpl)
+        self._data = None
 
-    def create_content(self) -> str:
-        result = ""
-        try:
-            cfg_data = self._get_kindfile_data()
-            self._render_tpl_configs(cfg_data)
-            self._copy_configs()
-        except Exception as err:
-            result = repr(err)
-        return result
+    def data(self) -> Dict[str, str]:
+        if not self._data:
+            self._cfg.parse()
+            self._data = self._cfg.data()
+        return self._data
 
-    def _render_tpl_configs(self, cfg_data: dict[str, str]) -> None:
-        self._tpl.render_template(cfg_data, "j2/config.j2.yaml", ".kind/config")
-        if self._cfg.getboolean("internal_registry"):
-            self._tpl.render_template(cfg_data, "j2/internal-registry-connect.j2.sh", ".kind/scripts", "", 0o0755)
-            self._tpl.render_template(cfg_data, "j2/internal-registry-create.j2.sh", ".kind/scripts", "", 0o0755)
-            self._tpl.render_template(cfg_data, "j2/internal-registry.j2.yaml", ".kind/config")
+    def has_config(self) -> bool:
+        data = self.data()
+        key = 'config_dir'
 
-        if self._cfg.getboolean("loadbalancer"):
-            self._tpl.render_template(cfg_data, "j2/update-metallb-ipaddresspool.j2.sh", ".kind/scripts", "", 0o0755)
-            self._tpl.render_template(cfg_data, "metallb-config.tpl.yaml", ".kind/config")
+        if key not in data:
+            return False
 
-        return None
+        config_dir = data[key]
+        config_dir = os.path.abspath(os.path.join(config_dir, 'config.yaml'))
 
-    def _copy_configs(self) -> None:
-        return None
-
-    def _get_kindfile_data(self) -> Dict[str, str]:
-        self._cfg.parse()
-        data = self._cfg.data()
-        return data
+        res = os.path.exists(config_dir)
+        return res
 
 class ClusterConfig:
     def __init__(self, tpl: templates.Templates) -> None:
