@@ -13,12 +13,12 @@ class CmdCreate:
 
     def create_content(self) -> str:
         result = ""
-        #try:
-        cfg_data = self._get_kindfile_data()
-        self._render_tpl_configs(cfg_data)
-        self._copy_configs()
-        #except Exception as err:
-        #    result = repr(err)
+        try:
+            cfg_data = self._get_kindfile_data()
+            self._render_tpl_configs(cfg_data)
+            self._copy_configs()
+        except Exception as err:
+            result = repr(err)
         return result
 
     def _render_tpl_configs(self, cfg_data: dict[str, str]) -> None:
