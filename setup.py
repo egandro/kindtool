@@ -81,11 +81,14 @@ setup(
     #package_data={  # Optional
     #    "sample": ["package_data.dat"],
     #},
+    package_data={
+        "kindtool": [ "templates/**/*"]
+    },
 
-    # https://stackoverflow.com/questions/27829754/include-entire-directory-in-python-setup-py-data-files
-    data_files=[("kindtool_templates",
-        glob('kindtool_templates/**/*', recursive=True), # includes sub-folders - recursive
-    )],  # Optional
+    # # https://stackoverflow.com/questions/27829754/include-entire-directory-in-python-setup-py-data-files
+    # data_files=[("kindtool_templates",
+    #     glob('kindtool_templates/**/*', recursive=True), # includes sub-folders - recursive
+    # )],  # Optional
     entry_points={  # Optional
         "console_scripts": [
             "kindtool=kindtool.__main__:main"

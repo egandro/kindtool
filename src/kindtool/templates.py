@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Dict
 from jinja2 import Environment, FileSystemLoader
 import os
+import sys
 import shutil
 
 class Templates:
@@ -10,10 +11,13 @@ class Templates:
         self._dest_dir = os.path.realpath(dest_dir)
 
     def _detect_template_path(self) -> str:
+        # probably better ?
+        # https://stackoverflow.com/questions/5897666/how-do-i-use-data-in-package-data-from-source-code
+        tpl_dir_basename = "templates"
         file_path = os.path.realpath(__file__)
         file_dir = os.path.dirname(file_path)
-        upper = os.path.dirname(os.path.dirname(file_dir)) # 2 level up
-        tpl_dir = os.path.join(upper, "kindtool_templates")
+        tpl_dir = os.path.join(file_dir, tpl_dir_basename)
+        tpl_dir = os.path.abspath(tpl_dir)
         return tpl_dir
 
     def get_kindfile(self) -> str:
