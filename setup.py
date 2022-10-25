@@ -8,6 +8,7 @@ https://github.com/pypa/sampleproject
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
 import pathlib
+from glob import glob
 
 here = pathlib.Path(__file__).parent.resolve()
 
@@ -24,8 +25,8 @@ setup(
     long_description=long_description,  # Optional
     long_description_content_type="text/markdown",  # Optional (see note above)
     url="https://github.com/egandro/kindtool",  # Optional
-    author="Harakd Fielker",  # Optional
-    #author_email="author@example.com",  # Optional
+    author="Harald Fielker",  # Optional
+    author_email="harald.fielker@gmail.com",  # Optional
     # Classifiers help users find your project by categorizing it.
     #
     # For a list of valid classifiers, see https://pypi.org/classifiers/
@@ -79,10 +80,9 @@ setup(
     #    "sample": ["package_data.dat"],
     #},
 
-    data_files=[("kindtool_templates", [
-            "kindtool_templates/cluster-configuration"
-            "kindtool_templates/config.in.yaml"
-        ]
+    # https://stackoverflow.com/questions/27829754/include-entire-directory-in-python-setup-py-data-files
+    data_files=[("kindtool_templates",
+        glob('kindtool_templates/**/*', recursive=True), # includes sub-folders - recursive
     )],  # Optional
     entry_points={  # Optional
         "console_scripts": [
