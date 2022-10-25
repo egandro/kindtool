@@ -6,7 +6,7 @@ import os
 
 import typer
 
-from kindtool import __app_name__, __version__, cmdinit, cmdup, templates
+from kindtool import __app_name__, __version__, cmdinit, cmdup, cmddestroy, templates
 
 app = typer.Typer()
 
@@ -45,6 +45,17 @@ def up(ctx: typer.Context) -> None:
     tpl = templates.Templates(dest_dir=dest_dir)
     up = cmdup.CmdUp(tpl)
     is_valid(up.run())
+    return None
+
+@app.command(
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
+    help="Deletes a running clustery."
+)
+def destroy(ctx: typer.Context) -> None:
+    dest_dir=get_dest_dir(ctx)
+    tpl = templates.Templates(dest_dir=dest_dir)
+    destroy = cmddestroy.CmdDestroy(tpl)
+    is_valid(destroy.run())
     return None
 
 def _version_callback(value: bool) -> None:

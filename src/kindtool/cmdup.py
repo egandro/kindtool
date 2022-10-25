@@ -28,12 +28,13 @@ class CmdUp:
             args = [
                 "create",
                 "cluster",
-                "--config", self._kindfile.config_yaml()
+                "--config", self._kindfile.config_yaml(),
+                "--name", self._kindfile.cluster_name()
                 #"--kubeconfig", self._kindfile.kubeconfig()
             ]
 
             if not self._runner.kind(args):
-                return "can't sart the cluster"
+                return "can't start the cluster"
 
             if self._kindfile.has_internal_registry():
                 script = "internal-registry-connect.sh"
@@ -60,6 +61,7 @@ class CmdUp:
         if key in cfg_data and cfg_data[key]:
             self._tpl.render_template(cfg_data, "j2/internal-registry-connect.j2.sh", ".kind/scripts", "", 0o0755)
             self._tpl.render_template(cfg_data, "j2/internal-registry-create.j2.sh", ".kind/scripts", "", 0o0755)
+            self._tpl.render_template(cfg_data, "j2/internal-registry-delete.j2.sh", ".kind/scripts", "", 0o0755)
             self._tpl.render_template(cfg_data, "j2/internal-registry.j2.yaml", ".kind/config")
 
         key = "loadbalancer"

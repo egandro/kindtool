@@ -52,9 +52,6 @@ $ kindtool init <projectdir>
 # warning: put `.kind` to your gitignore
 $ kindtool up
 
-# stops the kind cluster - configuration, k8s config and persistent data will be keped
-$ kindtool halt
-
 # kills the kind cluster - configuration, k8s config is removed,
 # the persistent data will be keped in .kind/data
 $ kindtool destroy
