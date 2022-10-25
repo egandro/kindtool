@@ -27,7 +27,9 @@ class Templates:
     def get_dest_dir(self) -> str:
         return self._dest_dir
 
-    def copy_file(self, tpl_filename: str, dest_sub_dir: str="", mode: int=None) -> None:
+    def copy_file(self, tpl_filename: str, dest_sub_dir: str="",
+            fail_if_exists: bool=False, mode: int=None
+        ) -> None:
         dest_file_path = self._dest_dir
 
         if dest_sub_dir:
@@ -40,6 +42,9 @@ class Templates:
 
         dest_file = os.path.join(dest_file_path, os.path.basename(tpl_filename))
         dest_file = os.path.realpath(dest_file)
+
+        if fail_if_exists and os.path.exists(dest_file):
+            raise FileExistsError(dest_file)
 
         shutil.copyfile(src_file, dest_file)
 
