@@ -11,6 +11,7 @@ Support private registries <https://kind.sigs.k8s.io/docs/user/private-registrie
 ```
 private_registry=true
 private_registry_config=.$HOME/.secret_registry/config.json
+... more to come e.g. environment variables
 ```
 
 Install k8s dashboard
@@ -18,6 +19,11 @@ Install k8s dashboard
 ```
 # installs the dashbard and creates a token file to `config_dir`/token
 dashboard=true
+
+# install the dashboard, create dashbord user, create token, run dashboard with port forwarding
+# $ kindgen dashboard
+#       your token is: <some data here>
+#       start your browser here: <http://localhost:whatever>
 ```
 
 Support customizable templates

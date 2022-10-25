@@ -39,7 +39,7 @@ sudo mv ./kind /usr/local/bin/kind
 ### Kindtool installation
 
 ```
-$ pip install git+https://github.com/egandro/kindtool.git#egg=kindtool
+$ pip install git+https://github.com/egandro/kindtool.git
 ```
 
 ## Workflow
@@ -49,20 +49,24 @@ $ pip install git+https://github.com/egandro/kindtool.git#egg=kindtool
 $ kindtool init <projectdir>
 
 # creates the cluster - this will create a .kind directory next to Kindfile
+# warning: put `.kind` to your gitignore
 $ kindtool up
 
-# stops the kind cluster - the persistent data will be keped in .kind/data
+# stops the kind cluster - configuration, k8s config and persistent data will be keped
 $ kindtool halt
 
-# kills the kind cluster - the persistent data will be keped in .kind/data
+# kills the kind cluster - configuration, k8s config is removed,
+# the persistent data will be keped in .kind/data
 $ kindtool destroy
 
-# removes the data folder of - this needs to be run as root! Docker might created files that have 0/0 uids/gids
-$ sudo kindtool delete-data
+# kills the kind cluster  and removes the data folder
+# this needs to be run as root! Docker might created files that have 0/0 uids/gids
+$ sudo kindtool destroy -f
 
 # is kind running - print status information
 $ kindtool status
 
-# returns the directory with the config files - can be used as export KUBECONFIG=$(kindfile get kubeconfig)
+# returns the directory with the config files
+# can be used as export KUBECONFIG=$(kindfile get kubeconfig)
 $ kindtool get kubeconfig
 ```
