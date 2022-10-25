@@ -1,0 +1,21 @@
+# kind is the default
+cluster_name=
+internal_registry=false
+# <clustername>-registry is the default
+internal_registry_name=
+# 5001 is the default
+internal_registry_port=
+ingress=true
+ingress_http_port=8000
+ingress_https_port=8443
+loadbalancer=true
+worker_nodes=3
+mountpoints=true
+# default is $(Kindfile_dir)/.kind/data
+mount_dir=
+copy_examples=true
+# default is $(Kindfile_dir)/.kind/config
+config_dir=
+# default is main IP of the host
+# set back to 127.0.0.1 if you don't want this
+api_server_address=

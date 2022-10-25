@@ -42,11 +42,10 @@ sudo mv ./kind /usr/local/bin/kind
 $ pip install git+https://github.com/egandro/kindtool.git#egg=kindtool
 ```
 
-
 ## Workflow
 
 ```
-# creates a new Kindfile edit
+# creates a new Kindfile (edit for your needs)
 $ kindtool init <projectdir>
 
 # creates the cluster - this will create a .kind directory next to Kindfile
@@ -66,8 +65,4 @@ $ kindtool status
 
 # returns the directory with the config files - can be used as export KUBECONFIG=$(kindfile get kubeconfig)
 $ kindtool get kubeconfig
-
-# returns the ingress_http_port port - in case you have auto port number enabled
-$ kindtool get ingress_http_port
-
 ```
