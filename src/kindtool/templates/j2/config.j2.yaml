@@ -6,9 +6,14 @@ containerdConfigPatches:
   [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:{{ internal_registry_port }}"]
     endpoint = ["http://{{ internal_registry_name }}:5000"]
 {% endif -%}
+{% if api_server_address -%}
 networking:
   apiServerAddress: "{{ api_server_address }}"
-  #apiServerPort: 33333 # go with random port
+{% if api_server_port -%}
+# static port
+  apiServerPort: {{ api_server_port }}
+{% endif -%}
+{% endif -%}
 nodes:
 {% include 'j2/controller.j2.yaml' -%}
 {% if worker_nodes > 0 -%}

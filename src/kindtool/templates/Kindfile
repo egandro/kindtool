@@ -18,3 +18,5 @@ config_dir=
 # default is main IP of the host
 # set back to 127.0.0.1 if you don't want this
 api_server_address=
+# keep empty, if you want to have a randomized port
+api_server_port=
