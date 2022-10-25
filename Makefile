@@ -15,6 +15,10 @@ test-dind: sdist
 		-v $$(pwd)/dist:/dist \
 		-it $(TEST_KINDTOOL_IMG)
 
+run-kindtool:
+	cd src && python3 -m kindtool init ../build
+	cd src && python3 -m kindtool create ../build
+
 sdist:
 	rm -rf dist
 	python3 setup.py sdist

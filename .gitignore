@@ -10,3 +10,6 @@ __pycache__/
 
 # due to using pytest
 .cache
+
+# run localtests
+.kindtool_test
