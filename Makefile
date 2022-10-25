@@ -18,11 +18,12 @@ sdist:
 	rm -rf dist
 	python3 setup.py sdist
 
+## --user="${UID}:${GID}"
 sdist-test: sdist
-	docker run --rm --name kindtool-$@ --user="${UID}:${GID}" -v $$(pwd)/dist:/dist -it $(PYTHON_IMG)  \
+	docker run --rm --name kindtool-$@ -v $$(pwd)/dist:/dist -it $(PYTHON_IMG)  \
 		/bin/sh -c 'pip --disable-pip-version-check install --root-user-action=ignore /dist/*.tar.gz && kindtool -v'
 
 # https://towardsdatascience.com/how-to-upload-your-python-package-to-pypi-de1b363a1b3
 package: sdist-test
 	#pip3 install twine
-	twine upload dist/*
+	twine upload dist/*.tar.gz
