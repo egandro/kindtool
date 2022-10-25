@@ -1,11 +1,12 @@
 from typing import Any, Dict
 
-from kindtool import __version__, templates, kindfile
+from kindtool import __version__, runner, templates, kindfile
 
 class CmdUp:
     def __init__(self, tpl: templates.Templates) -> None:
         self._tpl = tpl
         self._kindfile = kindfile.Kindfile(tpl)
+        self._runner = runner.Runner()
 
     def run(self) -> str:
         result = ""
@@ -14,6 +15,31 @@ class CmdUp:
                 result = self._create_content()
             if result:
                 return
+
+            cluster_name = self._kindfile.cluster_name()
+            if self._runner.kind_is_running(cluster_name):
+                return f"cluster {cluster_name} is already running"
+
+            if self._kindfile.has_internal_registry():
+                script = "internal-registry-create.sh"
+                if not self._runner.run_script(self._kindfile.scripts_dir(), script):
+                    return f"error running: {script}"
+
+            args = [
+                "create",
+                "cluster",
+                "--config", self._kindfile.config_yaml()
+                #"--kubeconfig", self._kindfile.kubeconfig()
+            ]
+
+            if not self._runner.kind(args):
+                return "can't sart the cluster"
+
+            if self._kindfile.has_internal_registry():
+                script = "internal-registry-connect.sh"
+                if not self._runner.run_script(self._kindfile.scripts_dir(), script):
+                    return f"error running: {script}"
+
         except Exception as err:
             result = repr(err)
         return result

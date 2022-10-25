@@ -19,17 +19,63 @@ class Kindfile:
         return self._data
 
     def has_config(self) -> bool:
+        config_yml = self.config_yaml()
+        res = os.path.exists(config_yml)
+        return res
+
+    def kubeconfig(self) -> str:
+        config_dir = self.config_dir()
+
+        if not config_dir:
+            return ""
+
+        res = os.path.abspath(os.path.join(config_dir, 'config'))
+        return res
+
+    def config_yaml(self) -> str:
+        config_dir = self.config_dir()
+
+        if not config_dir:
+            return ""
+
+        res = os.path.abspath(os.path.join(config_dir, 'config.yaml'))
+        return res
+
+    def scripts_dir(self) -> str:
+        res = os.path.abspath(os.path.join(self._tpl.get_dest_dir(), '.kind/scripts'))
+        return res
+
+    def config_dir(self) -> str:
         data = self.data()
         key = 'config_dir'
 
         if key not in data:
-            return False
+            return ""
 
         config_dir = data[key]
-        config_dir = os.path.abspath(os.path.join(config_dir, 'config.yaml'))
-
-        res = os.path.exists(config_dir)
+        res = os.path.abspath(config_dir)
         return res
+
+    def cluster_name(self) -> str:
+        data = self.data()
+        key = 'cluster_name'
+
+        if key not in data:
+            return ""
+
+        res = data[key]
+        return res
+
+    def has_internal_registry(self) -> bool:
+        data = self.data()
+        key = 'internal_registry'
+
+        if key not in data:
+            return False
+
+        res = data[key]
+        return res
+
 
 class ClusterConfig:
     def __init__(self, tpl: templates.Templates) -> None:
