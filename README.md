@@ -39,7 +39,7 @@ sudo mv ./kind /usr/local/bin/kind
 ### Kindtool installation
 
 ```
-$ pip install git+https://github.com/egandro/kindtool.git
+$ pip install kindtool
 ```
 
 ## Workflow
