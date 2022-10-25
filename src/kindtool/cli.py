@@ -17,6 +17,8 @@ def is_valid(error: str) -> None:
         )
         raise typer.Exit(1)
 
+# what's wrong with this?
+# https://typer.tiangolo.com/tutorial/commands/context/
 def get_dest_dir(ctx: typer.Context) -> str:
     dest_dir=os.getcwd()
     if ctx.args:
