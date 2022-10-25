@@ -7,6 +7,7 @@ TEST_KINDTOOL_IMG=test-kindtool-dind
 requirements:
 	pip3 install -r requirements.txt
 
+# this doen't work
 test-dind: sdist
 	DOCKER_BUILDKIT=1 docker build tests/docker -t $(TEST_KINDTOOL_IMG)
 	docker run --rm --name kindtool-$@ \
