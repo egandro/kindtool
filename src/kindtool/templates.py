@@ -55,7 +55,9 @@ class Templates:
                 # Windows friends
                 pass
 
-    def render_template(self, data: Dict[str,str], tpl_filename: str, dest_sub_dir: str, dest_filename: str="") -> None:
+    def render_template(self, data: Dict[str,str], tpl_filename: str,
+            dest_sub_dir: str, dest_filename: str="", mode: int=None
+        ) -> None:
         dest_file_path = os.path.join(self._dest_dir, dest_sub_dir)
 
         if not dest_filename:
@@ -68,6 +70,13 @@ class Templates:
         dest_file = os.path.realpath(os.path.join(dest_file_path, dest_filename))
 
         self._render_template(data, tpl_filename, dest_file)
+
+        if mode:
+            try:
+                Path(dest_file).chmod(mode)
+            except Exception:
+                # Windows friends
+                pass
 
     def _render_template(self, cfg_data: dict[str, str], tpl_filename: str, dest_file: str) -> None:
         # https://ttl255.com/jinja2-tutorial-part-1-introduction-and-variable-substitution/

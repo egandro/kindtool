@@ -24,9 +24,14 @@ class CmdCreate:
     def _render_tpl_configs(self, cfg_data: dict[str, str]) -> None:
         self._tpl.render_template(cfg_data, "j2/config.j2.yaml", ".kind/config")
         if self._cfg.getboolean("internal_registry"):
-            self._tpl.render_template(cfg_data, "j2/internal-registry-connect.j2.sh", ".kind/scripts")
-            self._tpl.render_template(cfg_data, "j2/internal-registry-create.j2.sh", ".kind/scripts")
+            self._tpl.render_template(cfg_data, "j2/internal-registry-connect.j2.sh", ".kind/scripts", "", 0o0755)
+            self._tpl.render_template(cfg_data, "j2/internal-registry-create.j2.sh", ".kind/scripts", "", 0o0755)
             self._tpl.render_template(cfg_data, "j2/internal-registry.j2.yaml", ".kind/config")
+
+        if self._cfg.getboolean("loadbalancer"):
+            self._tpl.render_template(cfg_data, "j2/update-metallb-ipaddresspool.j2.sh", ".kind/scripts", "", 0o0755)
+            self._tpl.render_template(cfg_data, "metallb-config.tpl.yaml", ".kind/config")
+
         return None
 
     def _copy_configs(self) -> None:
