@@ -5,10 +5,9 @@ from typing import List, Optional
 
 import typer
 
-from kindtool import __app_name__, __version__, configinit, configcreate, templates
+from kindtool import __app_name__, __version__, cmdcreate, cmdinit, templates
 
 app = typer.Typer()
-tpl = templates.Templates()
 
 def is_valid(error: str) -> None:
     if error:
@@ -21,8 +20,8 @@ def is_valid(error: str) -> None:
     help="Creates a directory with configuration file."
 )
 def init(dest_dir: str) -> None:
-    is_valid(tpl.prepare_dest_dir(dest_dir))
-    init = configinit.ConfigInit(tpl)
+    tpl = templates.Templates(dest_dir=dest_dir)
+    init = cmdinit.CmdInit(tpl)
     is_valid(init.create_content())
     return None
 
@@ -30,8 +29,8 @@ def init(dest_dir: str) -> None:
     help="Creates a new deployment based on an initalized directory."
 )
 def create(dest_dir: str) -> None:
-    is_valid(tpl.has_valid_dest_dir(dest_dir))
-    create = configcreate.ConfigCreate(tpl)
+    tpl = templates.Templates(dest_dir=dest_dir)
+    create = cmdcreate.CmdCreate(tpl)
     is_valid(create.create_content())
     return None
 

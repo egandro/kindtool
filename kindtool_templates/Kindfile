@@ -13,7 +13,6 @@ worker_nodes=3
 mountpoints=true
 # default is $(Kindfile_dir)/.kind/data
 mount_dir=
-copy_examples=true
 # default is $(Kindfile_dir)/.kind/config
 config_dir=
 # default is main IP of the host

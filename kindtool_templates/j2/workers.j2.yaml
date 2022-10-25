@@ -1,0 +1,14 @@
+{% for i in range(worker_nodes): -%}
+
+- role: worker
+{% for local_share in ['worker'+((i+1)|string) ] -%}
+{% include 'j2/extramounts.j2.yaml' -%}
+{% endfor -%}
+  # read about labels: https://kind.sigs.k8s.io/docs/user/configuration/
+  labels:
+    "worker": "true"
+{% if i == 0 -%}
+{% include 'j2/ingress-node.j2.yaml' -%}
+{% endif -%}
+
+{%- endfor -%}

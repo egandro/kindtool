@@ -1,0 +1,10 @@
+- role: control-plane
+{% for local_share in ['controller'] -%}
+{% include 'j2/extramounts.j2.yaml' -%}
+{% endfor -%}
+  # read about labels: https://kind.sigs.k8s.io/docs/user/configuration/
+  labels:
+    "controller": "true"
+{% if worker_nodes < 1 -%}
+{% include 'j2/ingress-node.j2.yaml' -%}
+{% endif -%}

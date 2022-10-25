@@ -1,0 +1,13 @@
+{% if ingress -%}
+# ingress
+    "tier": "frontend"
+    "ingress-ready": "true" # used to pick this worker as public endpoint port node
+  # the first worker node gets the public port for ingress
+  # this needs to be moved to the control-plane, if you don' have workers
+  extraPortMappings:
+  # ingress
+  - containerPort: 80
+    hostPort: {{ingress_http_port}}
+  - containerPort: 443
+    hostPort: {{ingress_https_port}}
+{% endif -%}
