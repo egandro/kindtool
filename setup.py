@@ -49,6 +49,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3 :: Only",
     ],
     keywords="kind, k8s, generator, development",  # Optional
@@ -67,6 +68,7 @@ setup(
     packages=find_packages(where="src"),  # Required
     python_requires=">=3.7, <4",
     install_requires=[
+        "typer",
         "Jinja2"
     ],
     extras_require={  # Optional
