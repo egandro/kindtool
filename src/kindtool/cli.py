@@ -1,7 +1,8 @@
 """This module provides the RP To-Do CLI."""
 
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional
+import os
 
 import typer
 
@@ -16,19 +17,29 @@ def is_valid(error: str) -> None:
         )
         raise typer.Exit(1)
 
+def get_dest_dir(ctx: typer.Context) -> str:
+    dest_dir=os.getcwd()
+    if ctx.args:
+        dest_dir=ctx.args[0]
+    return dest_dir
+
 @app.command(
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
     help="Creates a directory with configuration file."
 )
-def init(dest_dir: str) -> None:
+def init(ctx: typer.Context) -> None:
+    dest_dir=get_dest_dir(ctx)
     tpl = templates.Templates(dest_dir=dest_dir)
     init = cmdinit.CmdInit(tpl)
     is_valid(init.create_content())
     return None
 
 @app.command(
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
     help="Creates a new deployment based on an initalized directory."
 )
-def create(dest_dir: str) -> None:
+def create(ctx: typer.Context) -> None:
+    dest_dir=get_dest_dir(ctx)
     tpl = templates.Templates(dest_dir=dest_dir)
     create = cmdcreate.CmdCreate(tpl)
     is_valid(create.create_content())
