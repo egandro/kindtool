@@ -82,7 +82,7 @@ setup(
     #    "sample": ["package_data.dat"],
     #},
     package_data={
-        "kindtool": [ "templates/**/"]
+        "kindtool": [ "templates/**/*"]
     },
 
     # # https://stackoverflow.com/questions/27829754/include-entire-directory-in-python-setup-py-data-files

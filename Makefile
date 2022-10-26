@@ -30,6 +30,8 @@ run-kindtool-destroy-force:
 
 sdist:
 	rm -rf dist
+	rm -rf src/kindtool/__pycache__
+	rm -rf src/kindtool.egg-info
 	python3 setup.py sdist
 
 ## --user="${UID}:${GID}"
