@@ -6,9 +6,11 @@ CLUSTER_NAME="{{cluster_name}}"
 
 # https://kind.sigs.k8s.io/docs/user/loadbalancer/
 
-cat ../config/metallb-config.tpl.yaml  \
-    | sed -e 's|PREFIX|'$(docker network inspect -f "\{\{.IPAM.Config\}\}" "${CLUSTER_NAME}" \
-    | sed -s "s|^\[{||" | sed -s "s|\.0/16.*||")'|g'  > ../config/metallb-config.yaml
+ips=$(docker network inspect -f \{\{.IPAM.Config\}\} "${CLUSTER_NAME}")
+prefix=$(echo $ips | sed -s "s|^\["{"||" | sed -s "s|\.0/16.*||")
+
+cat {{config_dir}}/metallb-config.tpl.yaml  \
+    | sed -e 's|PREFIX|'${prefix}'|g'  > {{config_dir}}/metallb-config.yaml
 
 sleep 30 # hit me with a stick
 
@@ -17,6 +19,6 @@ kubectl wait --namespace metallb-system \
                 --selector=app=metallb \
                 --timeout=300s
 
-kubectl apply -f ../config/metallb-config.yaml
+kubectl apply -f {{config_dir}}/metallb-config.yaml
 
 rm -f ../config/metallb-config.yaml

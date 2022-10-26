@@ -40,6 +40,19 @@ class CmdUp:
                 if not self._runner.run_script(self._kindfile.scripts_dir(), script):
                     return f"error running: {script}"
 
+            if self._kindfile.has_ingress():
+                script = "ingress-install.sh"
+                if not self._runner.run_script(self._kindfile.scripts_dir(), script):
+                    return f"error running: {script}"
+
+            if self._kindfile.has_loadbalancer():
+                script = "metallb-install.sh"
+                if not self._runner.run_script(self._kindfile.scripts_dir(), script):
+                    return f"error running: {script}"
+                script = "update-metallb-ipaddresspool.sh"
+                if not self._runner.run_script(self._kindfile.scripts_dir(), script):
+                    return f"error running: {script}"
+
         except Exception as err:
             result = repr(err)
         return result
@@ -63,8 +76,13 @@ class CmdUp:
             self._tpl.render_template(cfg_data, "j2/internal-registry-delete.j2.sh", ".kind/scripts", "", 0o0755)
             self._tpl.render_template(cfg_data, "j2/internal-registry.j2.yaml", ".kind/config")
 
+        key = "ingress"
+        if key in cfg_data and cfg_data[key]:
+            self._tpl.copy_file("ingress-install.sh", ".kind/scripts", mode=0o0755)
+
         key = "loadbalancer"
         if key in cfg_data and cfg_data[key]:
+            self._tpl.copy_file("metallb-install.sh", ".kind/scripts", mode=0o0755)
             self._tpl.render_template(cfg_data, "j2/update-metallb-ipaddresspool.j2.sh", ".kind/scripts", "", 0o0755)
             self._tpl.render_template(cfg_data, "metallb-config.tpl.yaml", ".kind/config")
 

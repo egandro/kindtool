@@ -76,6 +76,27 @@ class Kindfile:
         res = data[key]
         return res
 
+    def has_ingress(self) -> bool:
+        data = self.data()
+        key = 'ingress'
+
+        if key not in data:
+            return False
+
+        res = data[key]
+        return res
+
+
+    def has_loadbalancer(self) -> bool:
+        data = self.data()
+        key = 'loadbalancer'
+
+        if key not in data:
+            return False
+
+        res = data[key]
+        return res
+
 
 class ClusterConfig:
     def __init__(self, tpl: templates.Templates) -> None:
