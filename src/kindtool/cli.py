@@ -52,10 +52,21 @@ def up(ctx: typer.Context) -> None:
     help="Deletes a running clustery."
 )
 def destroy(ctx: typer.Context) -> None:
-    dest_dir=get_dest_dir(ctx)
+    dest_dir=os.getcwd()
+    index = 0
+    if ctx.args:
+        if ctx.args[0].lower() != "-f":
+            dest_dir=ctx.args[0]
+            index+=1
+
+    force=False
+    if len(ctx.args) >index:
+        if ctx.args[index].lower() == "-f":
+            force = True
+
     tpl = templates.Templates(dest_dir=dest_dir)
     destroy = cmddestroy.CmdDestroy(tpl)
-    is_valid(destroy.run())
+    is_valid(destroy.run(force))
     return None
 
 def _version_callback(value: bool) -> None:

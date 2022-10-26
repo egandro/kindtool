@@ -8,7 +8,7 @@ class CmdDestroy:
         self._kindfile = kindfile.Kindfile(tpl)
         self._runner = runner.Runner()
 
-    def run(self) -> str:
+    def run(self, force: bool) -> str:
         result = ""
         try:
             if not self._kindfile.has_config():
@@ -29,6 +29,8 @@ class CmdDestroy:
                 script = "internal-registry-delete.sh"
                 if not self._runner.run_script(self._kindfile.scripts_dir(), script):
                     return f"error running: {script}"
+            if force:
+                self._tpl.delete_dest_dir()
 
         except Exception as err:
             result = repr(err)

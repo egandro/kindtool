@@ -2,7 +2,6 @@ from pathlib import Path
 from typing import Dict
 from jinja2 import Environment, FileSystemLoader
 import os
-import sys
 import shutil
 
 class Templates:
@@ -78,12 +77,16 @@ class Templates:
                 # Windows friends
                 pass
 
+    def delete_dest_dir(self) -> None:
+        shutil.rmtree(self.get_dest_dir(), ignore_errors=False)
+        return None
+
     def _render_template(self, cfg_data: dict[str, str], tpl_filename: str, dest_file: str) -> None:
         # https://ttl255.com/jinja2-tutorial-part-1-introduction-and-variable-substitution/
         # https://stackoverflow.com/questions/69056354/access-jinja2-templates-from-a-folder-outside-of-package
 
         env = Environment(loader=FileSystemLoader(self._tpl_path))
         tmpl = env.get_template(tpl_filename)
-        dest = tmpl.render(cfg_data)
+        data = tmpl.render(cfg_data)
 
-        Path(dest_file).write_text(dest)
+        Path(dest_file).write_text(data)

@@ -11,10 +11,9 @@ class CmdUp:
     def run(self) -> str:
         result = ""
         try:
-            if not self._kindfile.has_config():
-                result = self._create_content()
-            if result:
-                return
+            result = self._create_content()
+            if result != "":
+                return result
 
             cluster_name = self._kindfile.cluster_name()
             if self._runner.kind_is_running(cluster_name):
