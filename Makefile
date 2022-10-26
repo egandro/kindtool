@@ -16,17 +16,17 @@ test-dind: sdist
 		-it $(TEST_KINDTOOL_IMG)
 
 run-kindtool-init:
-	cd src && python3 -m kindtool init -d build
+	cd src && python3 -m kindtool init -d ../build
 
 run-kindtool-up:
-	if [ ! -d "./build/" ]; then cd src && python3 -m kindtool init -d build; fi
-	cd src && python3 -m kindtool up -d build
+	if [ ! -d "./build/" ]; then cd src && python3 -m kindtool init -d ../build; fi
+	cd src && python3 -m kindtool up -d ../build
 
 run-kindtool-destroy:
-	cd src && python3 -m kindtool destroy -d build
+	cd src && python3 -m kindtool destroy -d ../build
 
 run-kindtool-destroy-force:
-	cd src && python3 -m kindtool destroy -d build -f
+	cd src && python3 -m kindtool destroy -d ../build -f
 
 sdist:
 	rm -rf dist
