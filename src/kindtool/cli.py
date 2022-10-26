@@ -40,6 +40,13 @@ def create_parser_destroy(parent: argparse.ArgumentParser) -> None:
     parser.add_argument('--force','-f', action='store_true',
         help="force the deletion")
 
+def create_parser_status(parent: argparse.ArgumentParser) -> None:
+    name = 'status'
+    help = 'prints status information of the cluster'
+
+    parser = parent.add_parser(name, help=help)
+    add_default_arguments(parser)
+
 def create_parser_get_name(parent: argparse.ArgumentParser) -> None:
     name = 'name'
     help = 'name of the cluster'
@@ -67,6 +74,7 @@ def main() -> None:
     create_parser_init(subparser)
     create_parser_up(subparser)
     create_parser_destroy(subparser)
+    create_parser_status(subparser)
 
     # 'get' has subcommands
     parser_get = subparser.add_parser('get', help='get useful status information of the cluster')
@@ -90,14 +98,17 @@ def main() -> None:
         tpl = templates.Templates(dest_dir=args.directory)
         cmd = cmddestroy.CmdDestroy(tpl)
         cmd.run(args.force)
+    elif args.command == 'status':
+        raise NotImplementedError(f"command '{args.command}' is not implemented")
     elif args.command == 'get':
-        if args.get == 'name':
-            print(f'get {args.get} with {args.directory=}')
-        if args.get == 'kubeconfig':
-            print(f'get {args.get} with {args.directory=}')
-        if args.get == 'ingress':
-            print(f'get {args.get} with {args.directory=}')
-        else:
-            parser_get.print_usage()
+        raise NotImplementedError(f"command '{args.command}' is not implemented")
+        # if args.get == 'name':
+        #     print(f'get {args.get} with {args.directory=}')
+        # if args.get == 'kubeconfig':
+        #     print(f'get {args.get} with {args.directory=}')
+        # if args.get == 'ingress':
+        #     print(f'get {args.get} with {args.directory=}')
+        # else:
+        #     parser_get.print_usage()
     else:
         parser.print_usage()

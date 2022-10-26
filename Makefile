@@ -28,6 +28,9 @@ run-kindtool-destroy:
 run-kindtool-destroy-force:
 	cd src && python3 -m kindtool destroy -d ../build -f
 
+run-kindtool-status:
+	cd src && python3 -m kindtool status -d ../build
+
 sdist:
 	rm -rf dist
 	rm -rf src/kindtool/__pycache__
