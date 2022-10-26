@@ -71,6 +71,16 @@ class Kindfile:
         res = data[key]
         return res
 
+    def has_local_kubeconfig(self) -> bool:
+        data = self.data()
+        key = 'local_kubeconfig'
+
+        if key not in data:
+            return False
+
+        res = data[key]
+        return res
+
     def has_internal_registry(self) -> bool:
         data = self.data()
         key = 'internal_registry'

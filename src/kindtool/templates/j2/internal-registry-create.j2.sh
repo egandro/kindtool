@@ -5,6 +5,10 @@
 REGISTRY_NAME="{{internal_registry_name}}"
 REGISTRY_PORT={{internal_registry_port}}
 
+{% if local_kubeconfig -%}
+export KUBECONFIG={{config_dir}}/config
+{% endif -%}
+
 if [ "$(docker inspect -f '\{\{.State.Running\}\}' "${REGISTRY_NAME}" 2>/dev/null || true)" != 'true' ]; then
     echo "creating internal docker registry '${REGISTRY_NAME}' at http://localhost:${REGISTRY_PORT}"
     docker run \

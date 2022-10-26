@@ -1,5 +1,8 @@
 # 'kind' is the default cluster name
 cluster_name=
+# sets kubeconfig to $(Kindfile_dir)/.kind/config/config
+# kind's behaviour is either to use $KUBECONFIG or $HOME/.kube/config
+local_kubeconfig=true
 internal_registry=true
 # <clustername>-registry is the default
 internal_registry_name=

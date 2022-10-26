@@ -2,6 +2,10 @@
 
 CLUSTER_NAME="{{cluster_name}}"
 
+{% if local_kubeconfig -%}
+export KUBECONFIG={{config_dir}}/config
+{% endif -%}
+
 # we need to setup the lb adddreses according to our docker IPs
 
 # https://kind.sigs.k8s.io/docs/user/loadbalancer/
@@ -21,4 +25,4 @@ kubectl wait --namespace metallb-system \
 
 kubectl apply -f {{config_dir}}/metallb-config.yaml
 
-rm -f ../config/metallb-config.yaml
+rm -f {{config_dir}}/metallb-config.yaml

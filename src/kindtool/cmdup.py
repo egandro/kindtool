@@ -26,8 +26,11 @@ class CmdUp:
             "cluster",
             "--config", self._kindfile.config_yaml(),
             "--name", self._kindfile.cluster_name()
-            #"--kubeconfig", self._kindfile.kubeconfig()
         ]
+
+        if self._kindfile.has_local_kubeconfig():
+            args.append("--kubeconfig")
+            args.append(self._kindfile.kubeconfig())
 
         if not self._runner.kind(args):
             return "can't start the cluster"
@@ -76,7 +79,7 @@ class CmdUp:
 
         key = "loadbalancer"
         if key in cfg_data and cfg_data[key]:
-            self._tpl.copy_file("metallb-install.sh", ".kind/scripts", mode=0o0755)
+            self._tpl.render_template(cfg_data, "j2/metallb-install.j2.sh", ".kind/scripts", "", 0o0755)
             self._tpl.render_template(cfg_data, "j2/update-metallb-ipaddresspool.j2.sh", ".kind/scripts", "", 0o0755)
             self._tpl.render_template(cfg_data, "metallb-config.tpl.yaml", ".kind/config")
 

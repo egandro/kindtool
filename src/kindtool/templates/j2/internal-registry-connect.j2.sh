@@ -5,6 +5,10 @@
 REGISTRY_NAME="{{internal_registry_name}}"
 CLUSTER_NAME="{{cluster_name}}"
 
+{% if local_kubeconfig -%}
+export KUBECONFIG={{config_dir}}/config
+{% endif -%}
+
 echo "connecting cluster '${CLUSTER_NAME}' to internal docker registry '${REGISTRY_NAME}'"
 
 # connect the registry to the cluster network if not already connected

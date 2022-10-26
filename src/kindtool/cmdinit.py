@@ -10,4 +10,4 @@ class CmdInit:
         if os.path.exists(kind_filename):
             raise FileExistsError(f"Kindfile exists {kind_filename}")
 
-        self._tpl.copy_file(tpl_filename="Kindfile", fail_if_exists=True)
+        self._tpl.copy_file(tpl_filename="Kindfile")
