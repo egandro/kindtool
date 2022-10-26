@@ -75,7 +75,7 @@ class CmdUp:
 
         key = "ingress"
         if key in cfg_data and cfg_data[key]:
-            self._tpl.copy_file("ingress-install.sh", ".kind/scripts", mode=0o0755)
+            self._tpl.render_template(cfg_data, "j2/ingress-install.j2.sh", ".kind/scripts", "", 0o0755)
 
         key = "loadbalancer"
         if key in cfg_data and cfg_data[key]:
