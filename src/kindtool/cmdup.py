@@ -14,12 +14,14 @@ class CmdUp:
 
         cluster_name = self._kindfile.cluster_name()
         if self._runner.kind_is_running(cluster_name):
-            return f"cluster {cluster_name} is already running"
+            print(f"cluster {cluster_name} is already running")
+            return
 
         if self._kindfile.has_internal_registry():
             script = "internal-registry-create.sh"
             if not self._runner.run_script(self._kindfile.scripts_dir(), script):
-                return f"error running: {script}"
+                print(f"error running: {script}")
+                return
 
         args = [
             "create",

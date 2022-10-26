@@ -62,6 +62,9 @@ $ sudo kindtool destroy -f
 # is kind running - print status information
 $ kindtool status
 
+# start the k8s dashboard
+$ kindtool dashboard
+
 # returns the directory with the config files
 # can be used as export KUBECONFIG=$(kindfile get kubeconfig)
 $ kindtool get kubeconfig
