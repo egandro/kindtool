@@ -60,7 +60,11 @@ class CmdUp:
     def _create_content(self) -> str:
         result = ""
         try:
+            self._tpl.delete_scripts_dir()
+            self._tpl.delete_config_dir()
+
             cfg_data = self._kindfile.data()
+
             self._render_tpl_configs(cfg_data)
         except Exception as err:
             result = repr(err)

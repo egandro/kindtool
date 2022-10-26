@@ -29,6 +29,10 @@ class CmdDestroy:
                 script = "internal-registry-delete.sh"
                 if not self._runner.run_script(self._kindfile.scripts_dir(), script):
                     return f"error running: {script}"
+
+            self._tpl.delete_scripts_dir_content()
+            self._tpl.delete_config_dir_content()
+
             if force:
                 self._tpl.delete_dest_dir()
 

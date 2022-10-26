@@ -81,6 +81,18 @@ class Templates:
         shutil.rmtree(self.get_dest_dir(), ignore_errors=False)
         return None
 
+    def delete_scripts_dir(self) -> None:
+        dir = os.path.abspath(os.path.join(self.get_dest_dir(), '.kind/scripts'))
+        if os.path.exists(dir):
+            shutil.rmtree(dir, ignore_errors=False)
+        return None
+
+    def delete_config_dir(self) -> None:
+        dir = os.path.abspath(os.path.join(self.get_dest_dir(), '.kind/config'))
+        if os.path.exists(dir):
+            shutil.rmtree(dir, ignore_errors=False)
+        return None
+
     def _render_template(self, cfg_data: dict[str, str], tpl_filename: str, dest_file: str) -> None:
         # https://ttl255.com/jinja2-tutorial-part-1-introduction-and-variable-substitution/
         # https://stackoverflow.com/questions/69056354/access-jinja2-templates-from-a-folder-outside-of-package
