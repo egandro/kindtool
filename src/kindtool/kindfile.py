@@ -51,67 +51,39 @@ class Kindfile:
         return res
 
     def config_dir(self) -> str:
-        data = self.data()
         key = 'config_dir'
-
-        if key not in data:
-            return ""
-
-        config_dir = data[key]
+        config_dir = self.get_raw(key)
         res = os.path.abspath(config_dir)
         return res
 
     def cluster_name(self) -> str:
-        data = self.data()
         key = 'cluster_name'
+        return self.get_raw(key)
+
+    def has_local_kubeconfig(self) -> bool:
+        key = 'local_kubeconfig'
+        return self.get_raw(key)
+
+    def has_internal_registry(self) -> bool:
+        key = 'internal_registry'
+        return self.get_raw(key)
+
+    def has_ingress(self) -> bool:
+        key = 'ingress'
+        return self.get_raw(key)
+
+    def has_loadbalancer(self) -> bool:
+        key = 'loadbalancer'
+        return self.get_raw(key)
+
+    def get_raw(self, key: str) -> str:
+        data = self.data()
 
         if key not in data:
             return ""
 
         res = data[key]
         return res
-
-    def has_local_kubeconfig(self) -> bool:
-        data = self.data()
-        key = 'local_kubeconfig'
-
-        if key not in data:
-            return False
-
-        res = data[key]
-        return res
-
-    def has_internal_registry(self) -> bool:
-        data = self.data()
-        key = 'internal_registry'
-
-        if key not in data:
-            return False
-
-        res = data[key]
-        return res
-
-    def has_ingress(self) -> bool:
-        data = self.data()
-        key = 'ingress'
-
-        if key not in data:
-            return False
-
-        res = data[key]
-        return res
-
-
-    def has_loadbalancer(self) -> bool:
-        data = self.data()
-        key = 'loadbalancer'
-
-        if key not in data:
-            return False
-
-        res = data[key]
-        return res
-
 
 class ClusterConfig:
     def __init__(self, tpl: templates.Templates) -> None:

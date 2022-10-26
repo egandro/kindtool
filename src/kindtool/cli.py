@@ -1,6 +1,6 @@
 import argparse
 
-from kindtool import __app_name__, __version__, cmdinit, cmdup, cmddestroy, templates
+from kindtool import __app_name__, __version__, cmdinit, cmdget, cmdup, cmddestroy, templates
 
 def add_default_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument( '--directory', '-d', type=str,
@@ -63,7 +63,42 @@ def create_parser_get_kubeconfig(parent: argparse.ArgumentParser) -> None:
 
 def create_parser_get_ingress(parent: argparse.ArgumentParser) -> None:
     name = 'ingress'
-    help = 'returns True or False if ingress feature was enabled'
+    help = 'returns True or False if ingress feature is enabled'
+
+    parser = parent.add_parser(name, help=help)
+    add_default_arguments(parser)
+
+def create_parser_get_ingress_http_port(parent: argparse.ArgumentParser) -> None:
+    name = 'ingress_http_port'
+    help = 'returns the ingress http port'
+
+    parser = parent.add_parser(name, help=help)
+    add_default_arguments(parser)
+
+def create_parser_get_ingress_https_port(parent: argparse.ArgumentParser) -> None:
+    name = 'ingress_https_port'
+    help = 'returns the ingress https port'
+
+    parser = parent.add_parser(name, help=help)
+    add_default_arguments(parser)
+
+def create_parser_get_loadbalancer(parent: argparse.ArgumentParser) -> None:
+    name = 'loadbalancer'
+    help = 'returns True or False if loadbalancer feature is enabled'
+
+    parser = parent.add_parser(name, help=help)
+    add_default_arguments(parser)
+
+def create_parser_get_mountpoints(parent: argparse.ArgumentParser) -> None:
+    name = 'mountpoints'
+    help = 'returns True or False if the cluster has local persistant storage'
+
+    parser = parent.add_parser(name, help=help)
+    add_default_arguments(parser)
+
+def create_parser_get_internal_registry(parent: argparse.ArgumentParser) -> None:
+    name = 'internal_registry'
+    help = 'returns the prefix internal docker registry if internal_registry is enabled'
 
     parser = parent.add_parser(name, help=help)
     add_default_arguments(parser)
@@ -83,6 +118,11 @@ def main() -> None:
     create_parser_get_name(subparser)
     create_parser_get_kubeconfig(subparser)
     create_parser_get_ingress(subparser)
+    create_parser_get_ingress_http_port(subparser)
+    create_parser_get_ingress_https_port(subparser)
+    create_parser_get_loadbalancer(subparser)
+    create_parser_get_mountpoints(subparser)
+    create_parser_get_internal_registry(subparser)
 
     args = parser.parse_args()
 
@@ -101,14 +141,18 @@ def main() -> None:
     elif args.command == 'status':
         raise NotImplementedError(f"command '{args.command}' is not implemented")
     elif args.command == 'get':
-        raise NotImplementedError(f"command '{args.command}' is not implemented")
-        # if args.get == 'name':
-        #     print(f'get {args.get} with {args.directory=}')
-        # if args.get == 'kubeconfig':
-        #     print(f'get {args.get} with {args.directory=}')
-        # if args.get == 'ingress':
-        #     print(f'get {args.get} with {args.directory=}')
-        # else:
-        #     parser_get.print_usage()
+        arr = [
+            'name','kubeconfig',
+            'ingress', 'ingress_http_port', 'ingress_https_port',
+            'loadbalancer',
+            'mountpoints',
+            'internal_registry'
+        ]
+        if args.get in arr:
+            tpl = templates.Templates(dest_dir=args.directory)
+            cmd = cmdget.CmdGet(tpl)
+            cmd.get(args.get)
+        else:
+            parser_get.print_usage()
     else:
         parser.print_usage()
