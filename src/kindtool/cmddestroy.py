@@ -8,34 +8,30 @@ class CmdDestroy:
         self._kindfile = kindfile.Kindfile(tpl)
         self._runner = runner.Runner()
 
-    def run(self, force: bool) -> str:
-        result = ""
-        try:
-            if not self._kindfile.has_config():
-                result = "cluster is not configured"
-            if result:
-                return
+    def run(self, force: bool) -> None:
+        self._kindfile.throw_if_no_kindfile_found()
 
-            args = [
-                "delete",
-                "cluster",
-                "--name", self._kindfile.cluster_name()
-            ]
+        if not self._kindfile.has_config():
+            # we never started
+            return
 
-            if not self._runner.kind(args):
-                return "can't delete the cluster"
+        args = [
+            "delete",
+            "cluster",
+            "--name", self._kindfile.cluster_name()
+        ]
 
-            if self._kindfile.has_internal_registry():
-                script = "internal-registry-delete.sh"
-                if not self._runner.run_script(self._kindfile.scripts_dir(), script):
-                    return f"error running: {script}"
+        if not self._runner.kind(args):
+            return "can't delete the cluster"
 
-            self._tpl.delete_scripts_dir()
-            self._tpl.delete_config_dir()
+        if self._kindfile.has_internal_registry():
+            script = "internal-registry-delete.sh"
+            if not self._runner.run_script(self._kindfile.scripts_dir(), script):
+                return f"error running: {script}"
 
-            if force:
-                self._tpl.delete_dot_kind_dir()
+        self._tpl.delete_scripts_dir()
+        self._tpl.delete_config_dir()
 
-        except Exception as err:
-            result = repr(err)
-        return result
+        if force:
+            self._tpl.delete_dot_kind_dir()
+

@@ -1,88 +1,103 @@
-"""This module provides the RP To-Do CLI."""
-
-from pathlib import Path
-from typing import Optional
-import os
-
-import typer
+import argparse
 
 from kindtool import __app_name__, __version__, cmdinit, cmdup, cmddestroy, templates
 
-app = typer.Typer()
+def add_default_arguments(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument( '--directory', '-d', type=str,
+        metavar='DIR',
+        default='',
+        help="directory of Kindfile (default is current working directory)", required=False)
 
-def is_valid(error: str) -> None:
-    if error:
-        typer.secho(
-            f'{error}', fg=typer.colors.RED
-        )
-        raise typer.Exit(1)
+def main_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog=__app_name__)
+    parser.add_argument('--version', action='version',
+                    version='%(prog)s {version}'.format(version=__version__))
+    return parser
 
-# what's wrong with this?
-# https://typer.tiangolo.com/tutorial/commands/context/
-def get_dest_dir(ctx: typer.Context) -> str:
-    dest_dir=os.getcwd()
-    if ctx.args:
-        dest_dir=ctx.args[0]
-    return dest_dir
+def create_parser_init(parent: argparse.ArgumentParser) -> None:
+    name = 'init'
+    help = 'create a new Kindfile'
 
-@app.command(
-    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
-    help="Creates a directory with configuration file."
-)
-def init(ctx: typer.Context) -> None:
-    dest_dir=get_dest_dir(ctx)
-    tpl = templates.Templates(dest_dir=dest_dir)
-    init = cmdinit.CmdInit(tpl)
-    is_valid(init.create_content())
-    return None
+    parser = parent.add_parser(name, help=help)
+    parser.add_argument( '--directory', '-d', type=str,
+        metavar='DIR',
+        default='',
+        help="destination directory (default is current working directory)", required=False)
 
-@app.command(
-    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
-    help="Creates a new deployment based on an initalized directory."
-)
-def up(ctx: typer.Context) -> None:
-    dest_dir=get_dest_dir(ctx)
-    tpl = templates.Templates(dest_dir=dest_dir)
-    up = cmdup.CmdUp(tpl)
-    is_valid(up.run())
-    return None
+def create_parser_up(parent: argparse.ArgumentParser) -> None:
+    name = 'up'
+    help = 'start a cluster'
 
-@app.command(
-    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
-    help="Deletes a running clustery."
-)
-def destroy(ctx: typer.Context) -> None:
-    dest_dir=os.getcwd()
-    index = 0
-    if ctx.args:
-        if ctx.args[0].lower() != "-f":
-            dest_dir=ctx.args[0]
-            index+=1
+    parser = parent.add_parser(name, help=help)
+    add_default_arguments(parser)
 
-    force=False
-    if len(ctx.args) >index:
-        if ctx.args[index].lower() == "-f":
-            force = True
+def create_parser_destroy(parent: argparse.ArgumentParser) -> None:
+    name = 'destroy'
+    help = 'stops a cluster'
 
-    tpl = templates.Templates(dest_dir=dest_dir)
-    destroy = cmddestroy.CmdDestroy(tpl)
-    is_valid(destroy.run(force))
-    return None
+    parser = parent.add_parser(name, help=help)
+    add_default_arguments(parser)
+    parser.add_argument('--force','-f', action='store_true',
+        help="force the deletion")
 
-def _version_callback(value: bool) -> None:
-    if value:
-        typer.echo(f"{__app_name__} v{__version__}")
-        raise typer.Exit()
+def create_parser_get_name(parent: argparse.ArgumentParser) -> None:
+    name = 'name'
+    help = 'name of the cluster'
 
-@app.callback()
-def main(
-    version: Optional[bool] = typer.Option(
-        None,
-        "--version",
-        "-v",
-        help="Show the application's version and exit.",
-        callback=_version_callback,
-        is_eager=True,
-    )
-) -> None:
-    return
+    parser = parent.add_parser(name, help=help)
+    add_default_arguments(parser)
+
+def create_parser_get_kubeconfig(parent: argparse.ArgumentParser) -> None:
+    name = 'kubeconfig'
+    help = 'returns the directory containing the kubeconfig of the cluster'
+
+    parser = parent.add_parser(name, help=help)
+    add_default_arguments(parser)
+
+def create_parser_get_ingress(parent: argparse.ArgumentParser) -> None:
+    name = 'ingress'
+    help = 'returns True or False if ingress feature was enabled'
+
+    parser = parent.add_parser(name, help=help)
+    add_default_arguments(parser)
+
+def main() -> None:
+    parser = main_parser()
+    subparser = parser.add_subparsers(dest='command')
+    create_parser_init(subparser)
+    create_parser_up(subparser)
+    create_parser_destroy(subparser)
+
+    # 'get' has subcommands
+    parser_get = subparser.add_parser('get', help='get useful status information of the cluster')
+    subparser = parser_get.add_subparsers(dest='get')
+
+    create_parser_get_name(subparser)
+    create_parser_get_kubeconfig(subparser)
+    create_parser_get_ingress(subparser)
+
+    args = parser.parse_args()
+
+    if args.command == 'init':
+        tpl = templates.Templates(dest_dir=args.directory)
+        cmd = cmdinit.CmdInit(tpl)
+        cmd.create_content()
+    elif args.command == 'up':
+        tpl = templates.Templates(dest_dir=args.directory)
+        cmd = cmdup.CmdUp(tpl)
+        cmd.run()
+    elif args.command == 'destroy':
+        tpl = templates.Templates(dest_dir=args.directory)
+        cmd = cmddestroy.CmdDestroy(tpl)
+        cmd.run(args.force)
+    elif args.command == 'get':
+        if args.get == 'name':
+            print(f'get {args.get} with {args.directory=}')
+        if args.get == 'kubeconfig':
+            print(f'get {args.get} with {args.directory=}')
+        if args.get == 'ingress':
+            print(f'get {args.get} with {args.directory=}')
+        else:
+            parser_get.print_usage()
+    else:
+        parser.print_usage()

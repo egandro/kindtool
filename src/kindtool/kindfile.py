@@ -12,6 +12,11 @@ class Kindfile:
         self._cfg = ClusterConfig(tpl)
         self._data = None
 
+    def throw_if_no_kindfile_found(self) -> None:
+        kind_filename = self._tpl.get_kindfile()
+        if not os.path.exists(kind_filename):
+            raise FileNotFoundError(f"Kindfile not found {kind_filename}")
+
     def data(self) -> Dict[str, str]:
         if not self._data:
             self._cfg.parse()
