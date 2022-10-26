@@ -68,7 +68,7 @@ setup(
     packages=find_packages(where="src"),  # Required
     python_requires=">=3.7, <4",
     install_requires=[
-        "typer",
+        "argparse",
         "Jinja2"
     ],
     extras_require={  # Optional
