@@ -46,14 +46,13 @@ $ pip install kindtool
 
 ```
 # creates a new Kindfile (edit for your needs)
-$ kindtool init <projectdir>
+$ kindtool init -d <projectdir>
 
 # creates the cluster - this will create a .kind directory next to Kindfile
-# warning: put `.kind` to your gitignore
 $ kindtool up
 
 # kills the kind cluster - configuration, k8s config is removed,
-# the persistent data will be keped in .kind/data
+# the persistent data will be kept in .kind/data
 $ kindtool destroy
 
 # kills the kind cluster  and removes the data folder
