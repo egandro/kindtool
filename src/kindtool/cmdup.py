@@ -72,7 +72,7 @@ class CmdUp:
 
     def _render_tpl_configs(self, cfg_data: dict[str, str]) -> None:
         self._tpl.render_template(cfg_data, "j2/config.j2.yaml", ".kind/config")
-        self._tpl.render_template(cfg_data, "j2/git-ignore.j2", ".kind/config/.gitignore")
+        self._tpl.render_template(cfg_data, "j2/dot_gitignore.j2", ".kind/config", ".gitignore")
 
         key = "internal_registry"
         if key in cfg_data and cfg_data[key]:

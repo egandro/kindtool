@@ -77,8 +77,9 @@ class Templates:
                 # Windows friends
                 pass
 
-    def delete_dest_dir(self) -> None:
-        shutil.rmtree(self.get_dest_dir(), ignore_errors=False)
+    def delete_dot_kind_dir(self) -> None:
+        kind_dir = os.path.abspath(os.path.join(self.get_dest_dir(), '.kind'))
+        shutil.rmtree(kind_dir, ignore_errors=False)
         return None
 
     def delete_scripts_dir(self) -> None:

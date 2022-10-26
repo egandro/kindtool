@@ -34,7 +34,7 @@ class CmdDestroy:
             self._tpl.delete_config_dir()
 
             if force:
-                self._tpl.delete_dest_dir()
+                self._tpl.delete_dot_kind_dir()
 
         except Exception as err:
             result = repr(err)

@@ -1,14 +1,14 @@
-# kind is the default
+# 'kind' is the default cluster name
 cluster_name=
-internal_registry=false
+internal_registry=true
 # <clustername>-registry is the default
 internal_registry_name=
 # 5001 is the default
 internal_registry_port=
-ingress=true
+ingress=false
 ingress_http_port=8000
 ingress_https_port=8443
-loadbalancer=true
+loadbalancer=false
 worker_nodes=3
 mountpoints=true
 # default is $(Kindfile_dir)/.kind/data
