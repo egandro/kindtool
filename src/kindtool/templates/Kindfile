@@ -5,7 +5,7 @@ cluster_name=
 local_kubeconfig=true
 internal_registry=true
 # <clustername>-registry is the default
-internal_registry_name=
+internal_registry_docker_name=
 # 5001 is the default
 internal_registry_port=
 ingress=false
@@ -13,7 +13,8 @@ ingress_http_port=8000
 ingress_https_port=8443
 # loadbalancer
 metallb=false
-worker_nodes=3
+# 0 = default of k8s/kind, you only get the controller
+worker_nodes=0
 mountpoints=true
 # default is $(Kindfile_dir)/.kind/data
 mount_dir=
