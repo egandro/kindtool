@@ -24,8 +24,8 @@ class CmdGet:
         elif key == 'ingress_https_port':
             if self._kindfile.has_ingress():
                 value = self._kindfile.get_raw('ingress_https_port')
-        elif key == 'loadbalancer':
-            value = f"{self._kindfile.has_loadbalancer()}"
+        elif key == 'metallb':
+            value = f"{self._kindfile.has_metallb()}"
         elif key == 'mountpoints':
             value = self._kindfile.get_raw('mountpoints')
         elif key == 'internal_registry':

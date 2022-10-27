@@ -89,9 +89,9 @@ def create_parser_get_ingress_https_port(parent: argparse.ArgumentParser) -> Non
     parser = parent.add_parser(name, help=help)
     add_default_arguments(parser)
 
-def create_parser_get_loadbalancer(parent: argparse.ArgumentParser) -> None:
-    name = 'loadbalancer'
-    help = 'returns True or False if loadbalancer feature is enabled'
+def create_parser_get_metallb(parent: argparse.ArgumentParser) -> None:
+    name = 'metallb'
+    help = 'returns True or False if metallb feature is enabled'
 
     parser = parent.add_parser(name, help=help)
     add_default_arguments(parser)
@@ -128,7 +128,7 @@ def main() -> None:
     create_parser_get_ingress(subparser)
     create_parser_get_ingress_http_port(subparser)
     create_parser_get_ingress_https_port(subparser)
-    create_parser_get_loadbalancer(subparser)
+    create_parser_get_metallb(subparser)
     create_parser_get_mountpoints(subparser)
     create_parser_get_internal_registry(subparser)
 
@@ -154,7 +154,7 @@ def main() -> None:
         arr = [
             'name','kubeconfig',
             'ingress', 'ingress_http_port', 'ingress_https_port',
-            'loadbalancer',
+            'metallb',
             'mountpoints',
             'internal_registry'
         ]

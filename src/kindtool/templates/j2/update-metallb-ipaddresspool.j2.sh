@@ -10,19 +10,25 @@ export KUBECONFIG={{config_dir}}/config
 
 # https://kind.sigs.k8s.io/docs/user/loadbalancer/
 
-ips=$(docker network inspect -f \{\{.IPAM.Config\}\} "${CLUSTER_NAME}")
+# there is no network per cluster... we might want to have more Kindvariables at some point
+#DOCKER_NETWORK=${CLUSTER_NAME}
+DOCKER_NETWORK="kind"
+
+ips=$(docker network inspect -f \{\{.IPAM.Config\}\} "${DOCKER_NETWORK}")
 prefix=$(echo $ips | sed -s "s|^\["{"||" | sed -s "s|\.0/16.*||")
 
 cat {{config_dir}}/metallb-config.tpl.yaml  \
     | sed -e 's|PREFIX|'${prefix}'|g'  > {{config_dir}}/metallb-config.yaml
 
-sleep 30 # hit me with a stick
-
-kubectl wait --namespace metallb-system \
-                --for=condition=ready pod \
-                --selector=app=metallb \
-                --timeout=300s
-
+echo "waiting for metallb to become ready"
+# 300s might be bad on a bad bad network
+while true; do
+    kubectl wait --namespace metallb-system \
+                    --for=condition=ready pod \
+                    --selector=app=metallb \
+                    --timeout=300s  2>/dev/null && break
+    sleep 1
+done
 kubectl apply -f {{config_dir}}/metallb-config.yaml
 
 rm -f {{config_dir}}/metallb-config.yaml

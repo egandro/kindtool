@@ -47,7 +47,7 @@ class CmdUp:
             if not self._runner.run_script(self._kindfile.scripts_dir(), script):
                 return f"error running: {script}"
 
-        if self._kindfile.has_loadbalancer():
+        if self._kindfile.has_metallb():
             script = "metallb-install.sh"
             if not self._runner.run_script(self._kindfile.scripts_dir(), script):
                 return f"error running: {script}"
@@ -79,7 +79,7 @@ class CmdUp:
         if key in cfg_data and cfg_data[key]:
             self._tpl.render_template(cfg_data, "j2/ingress-install.j2.sh", ".kind/scripts", "", 0o0755)
 
-        key = "loadbalancer"
+        key = "metallb"
         if key in cfg_data and cfg_data[key]:
             self._tpl.render_template(cfg_data, "j2/metallb-install.j2.sh", ".kind/scripts", "", 0o0755)
             self._tpl.render_template(cfg_data, "j2/update-metallb-ipaddresspool.j2.sh", ".kind/scripts", "", 0o0755)

@@ -2,7 +2,7 @@
 # mointpoint
   extraMounts:
   - hostPath: {{mount_dir}}/{{local_share}}
-    containerPath: /mnt/data
+    containerPath: /data/worker
   - hostPath: {{mount_dir}}/shared
-    containerPath: /mnt/shared
+    containerPath: /data/shared
 {% endif -%}

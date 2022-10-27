@@ -72,8 +72,8 @@ class Kindfile:
         key = 'ingress'
         return self.get_raw(key)
 
-    def has_loadbalancer(self) -> bool:
-        key = 'loadbalancer'
+    def has_metallb(self) -> bool:
+        key = 'metallb'
         return self.get_raw(key)
 
     def get_raw(self, key: str) -> str:
