@@ -12,7 +12,7 @@ class CmdGet:
         value=''
 
         if key == 'name':
-            value = self._kindfile.cluster_name()
+            value = "kind-" + self._kindfile.cluster_name()
         elif key == 'kubeconfig':
             if self._kindfile.has_local_kubeconfig():
                 value = os.path.abspath(os.path.join(self._kindfile.config_dir(), 'config'))
