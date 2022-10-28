@@ -1,6 +1,6 @@
 import argparse
 
-from kindtool import __app_name__, __version__, cmdinit, cmdget, cmdup, cmddestroy, templates
+from kindtool import __app_name__, __version__, cmdinit, cmdget, cmdup, cmddestroy, cmddashboard, templates
 
 def add_default_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument( '--directory', '-d', type=str,
@@ -149,7 +149,9 @@ def main() -> None:
     elif args.command == 'status':
         raise NotImplementedError(f"command '{args.command}' is not implemented")
     elif args.command == 'dashboard':
-        raise NotImplementedError(f"command '{args.command}' is not implemented")
+        tpl = templates.Templates(dest_dir=args.directory)
+        cmd = cmddashboard.CmdDashboard(tpl)
+        cmd.run()
     elif args.command == 'get':
         arr = [
             'name','kubeconfig',
