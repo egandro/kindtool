@@ -14,7 +14,7 @@ export KUBECONFIG={{config_dir}}/config
 #DOCKER_NETWORK=${CLUSTER_NAME}
 DOCKER_NETWORK="kind"
 
-ips=$(docker network inspect -f \{\{.IPAM.Config\}\} "${DOCKER_NETWORK}")
+ips=$(docker network inspect -f "{""{".IPAM.Config"}""}" "${DOCKER_NETWORK}")
 prefix=$(echo $ips | sed -s "s|^\["{"||" | sed -s "s|\.0/16.*||")
 
 cat {{config_dir}}/metallb-config.tpl.yaml  \

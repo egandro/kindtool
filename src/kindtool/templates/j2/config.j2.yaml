@@ -4,8 +4,8 @@ apiVersion: kind.x-k8s.io/v1alpha4
 {% if internal_registry -%}
 containerdConfigPatches:
 - |-
-  [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:{{ internal_registry_port }}"]
-    endpoint = ["http://{{ internal_registry_name }}:5000"]
+  [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:{{ internal_registry_docker_port }}"]
+    endpoint = ["http://{{ internal_registry_docker_name }}:5000"]
 {% endif -%}
 {% if api_server_address -%}
 networking:

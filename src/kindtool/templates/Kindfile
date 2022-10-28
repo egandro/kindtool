@@ -7,7 +7,7 @@ internal_registry=true
 # <clustername>-registry is the default
 internal_registry_docker_name=
 # 5001 is the default
-internal_registry_port=
+internal_registry_docker_port=
 ingress=false
 ingress_http_port=8000
 ingress_https_port=8443

@@ -103,8 +103,8 @@ def create_parser_get_mountpoints(parent: argparse.ArgumentParser) -> None:
     parser = parent.add_parser(name, help=help)
     add_default_arguments(parser)
 
-def create_parser_get_internal_registry(parent: argparse.ArgumentParser) -> None:
-    name = 'internal_registry'
+def create_parser_get_internal_registry_prefix(parent: argparse.ArgumentParser) -> None:
+    name = 'internal_registry_prefix'
     help = 'returns the prefix internal docker registry if internal_registry is enabled'
 
     parser = parent.add_parser(name, help=help)
@@ -130,7 +130,7 @@ def main() -> None:
     create_parser_get_ingress_https_port(subparser)
     create_parser_get_metallb(subparser)
     create_parser_get_mountpoints(subparser)
-    create_parser_get_internal_registry(subparser)
+    create_parser_get_internal_registry_prefix(subparser)
 
     args = parser.parse_args()
 
@@ -156,7 +156,7 @@ def main() -> None:
             'ingress', 'ingress_http_port', 'ingress_https_port',
             'metallb',
             'mountpoints',
-            'internal_registry'
+            'internal_registry_prefix'
         ]
         if args.get in arr:
             tpl = templates.Templates(dest_dir=args.directory)

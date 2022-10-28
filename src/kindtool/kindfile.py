@@ -111,11 +111,11 @@ class ClusterConfig:
 
         key = "internal_registry"
         if self.getboolean(key):
-            key = "internal_registry_name"
+            key = "internal_registry_docker_name"
             self._parser.set(self._section, key,
-                self.get(key, self.get("cluster_name", "") + "_registry")
+                self.get(key, self.get("cluster_name") + "-registry")
             )
-            key = "internal_registry_port"
+            key = "internal_registry_docker_port"
             self._parser.set(self._section, key, str(self.getint(key, 5001)))
 
         key = "ingress"

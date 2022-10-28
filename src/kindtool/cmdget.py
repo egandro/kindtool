@@ -12,7 +12,7 @@ class CmdGet:
         value=''
 
         if key == 'name':
-            value = "kind-" + self._kindfile.cluster_name()
+            value = self._kindfile.cluster_name()
         elif key == 'kubeconfig':
             if self._kindfile.has_local_kubeconfig():
                 value = os.path.abspath(os.path.join(self._kindfile.config_dir(), 'config'))
@@ -28,9 +28,9 @@ class CmdGet:
             value = f"{self._kindfile.has_metallb()}"
         elif key == 'mountpoints':
             value = self._kindfile.get_raw('mountpoints')
-        elif key == 'internal_registry':
+        elif key == 'internal_registry_prefix':
             if self._kindfile.has_internal_registry():
-                value = f"localhost:{self._kindfile.get_raw('internal_registry_port')}"
+                value = f"localhost:{self._kindfile.get_raw('internal_registry_docker_port')}"
         else:
             raise NotImplementedError(f"key '{key}' not implemented")
 

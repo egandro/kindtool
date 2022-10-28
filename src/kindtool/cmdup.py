@@ -10,12 +10,13 @@ class CmdUp:
 
     def run(self) -> None:
         self._kindfile.throw_if_no_kindfile_found()
-        self._create_content()
 
         cluster_name = self._kindfile.cluster_name()
         if self._runner.kind_is_running(cluster_name):
             print(f"cluster {cluster_name} is already running")
             return
+
+        self._create_content()
 
         if self._kindfile.has_internal_registry():
             script = "internal-registry-create.sh"
