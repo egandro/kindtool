@@ -190,6 +190,8 @@ class ClusterConfig:
         if not value:
             value = os.path.realpath(os.path.join(self._tpl.get_dest_dir(), ".kind/data"))
             self._parser.set(self._section, key, value)
+            # this enforces our automatic generated dir to be 755 and our user
+            os.makedirs(value, exist_ok=True)
 
     def _update_api_server_address(self) -> str:
         key = "api_server_address"

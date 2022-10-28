@@ -49,3 +49,7 @@ sdist-test: sdist
 package: sdist-test
 	#pip3 install twine
 	twine upload dist/*.tar.gz
+
+dev-install: sdist
+	pip3 uninstall kind || true
+	pip3 install dist/*.tar.gz
