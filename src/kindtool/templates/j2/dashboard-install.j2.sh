@@ -8,12 +8,14 @@ export KUBECONFIG={{config_dir}}/config
 {% endif -%}
 
 run_dashboard() {
+    echo "Dashboard is running"
+    echo ""
     echo "Dashboard URL: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"
     echo ""
     echo "Token:"
-    $(cat ${TOKEN_FILE})
+    cat ${TOKEN_FILE}
     echo ""
-    echo "run command: kubectl proxy"
+    echo "run command: "'KUBECONFIG=$(kindtool get kubeconfig)'" kubectl proxy"
     echo ""
 }
 
