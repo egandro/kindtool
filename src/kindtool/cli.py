@@ -206,7 +206,6 @@ def main() -> None:
         if args.get in arr:
             tpl = templates.Templates(dest_dir=args.directory)
             cmd = cmdget.CmdGet(tpl)
-            print(args)
             cmd.get(args.get)
         else:
             parser_get.print_usage()
