@@ -40,7 +40,7 @@ sudo mv ./kind /usr/local/bin/kind
 ### Kindtool installation
 
 ```
-$ pip install kindtool
+$ pip3 install kindtool
 ```
 
 ## Workflow
