@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TOKEN_FILE="{{config_dir}}/token"
-DASHBOARD_VERSION="{{dashboard_version}}""
+DASHBOARD_VERSION="{{dashboard_version}}"
 
 {% if local_kubeconfig -%}
 export KUBECONFIG={{config_dir}}/config
