@@ -14,6 +14,7 @@ Requirements:
 - docker
 - python3
 - kind
+- kubectl
 
 ### Kind installation
 
