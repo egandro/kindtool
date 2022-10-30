@@ -15,6 +15,7 @@ run_dashboard() {
     echo "Token:"
     cat ${TOKEN_FILE}
     echo ""
+    echo ""
     echo "run command: "'KUBECONFIG=$(kindtool get kubeconfig)'" kubectl proxy"
     echo ""
 }
