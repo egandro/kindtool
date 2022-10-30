@@ -1,6 +1,6 @@
 import argparse
 
-from kindtool import __app_name__, __version__, cmdinit, cmdget, cmdup, cmddestroy, cmddashboard, templates
+from kindtool import __app_name__, __version__, cmdinit, cmdget, cmdup, cmddestroy, cmddashboard, cmdshell, templates
 
 def add_default_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument( '--directory', '-d', type=str,
@@ -59,6 +59,35 @@ def create_parser_dashboard(parent: argparse.ArgumentParser) -> None:
         metavar='VER',
         default=version,
         help=f"version of the dashboard (default {version})", required=False)
+
+def create_parser_shell(parent: argparse.ArgumentParser) -> None:
+    name = 'shell'
+    help = 'installs and start the k8s dashboard in the cluster'
+    pod = 'shell-pod'
+    image = 'ubuntu:22.04'
+
+    parser = parent.add_parser(name, help=help)
+    add_default_arguments(parser)
+
+    parser.add_argument( '--pod', '-p', type=str,
+        metavar='POD',
+        default=pod,
+        help=f"name of the shell pod (default {pod})", required=False)
+    parser.add_argument( '--image', '-i', type=str,
+        metavar='IMAGE',
+        default=image,
+        help=f"docker image of the shell pod (default {image})", required=False)
+    parser.add_argument( '--namespace', '-n', type=str,
+        metavar='NS',
+        default="default",
+        help=f"name of the namespace", required=False)
+    parser.add_argument( '--cmd', '-c', type=str,
+        metavar='CMD',
+        default="",
+        help=f"command to run as shell (e.g. /bin/bash - default guesstimate shell)", required=False)
+    parser.add_argument('--kill','-k', action='store_true',
+        help="kill shell pod")
+
 
 def create_parser_get_name(parent: argparse.ArgumentParser) -> None:
     name = 'name'
@@ -124,6 +153,7 @@ def main() -> None:
     create_parser_destroy(subparser)
     create_parser_status(subparser)
     create_parser_dashboard(subparser)
+    create_parser_shell(subparser)
 
     # 'get' has subcommands
     parser_get = subparser.add_parser('get', help='get useful status information of the cluster')
@@ -158,6 +188,13 @@ def main() -> None:
         tpl = templates.Templates(dest_dir=args.directory)
         cmd = cmddashboard.CmdDashboard(tpl, args.version)
         cmd.run()
+    elif args.command == 'shell':
+        tpl = templates.Templates(dest_dir=args.directory)
+        cmd = cmdshell.CmdShell(tpl, args.pod, args.namespace, args.image, args.cmd)
+        if args.kill:
+            cmd.kill()
+        else:
+            cmd.create_or_attach()
     elif args.command == 'get':
         arr = [
             'name','kubeconfig',
