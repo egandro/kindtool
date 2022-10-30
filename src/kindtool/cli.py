@@ -50,9 +50,15 @@ def create_parser_status(parent: argparse.ArgumentParser) -> None:
 def create_parser_dashboard(parent: argparse.ArgumentParser) -> None:
     name = 'dashboard'
     help = 'installs and start the k8s dashboard in the cluster'
+    version = '2.6.1'
 
     parser = parent.add_parser(name, help=help)
     add_default_arguments(parser)
+
+    parser.add_argument( '--version', '-v', type=str,
+        metavar='VER',
+        default=version,
+        help=f"version of the dashboard (default {version})", required=False)
 
 def create_parser_get_name(parent: argparse.ArgumentParser) -> None:
     name = 'name'
@@ -150,7 +156,7 @@ def main() -> None:
         raise NotImplementedError(f"command '{args.command}' is not implemented")
     elif args.command == 'dashboard':
         tpl = templates.Templates(dest_dir=args.directory)
-        cmd = cmddashboard.CmdDashboard(tpl)
+        cmd = cmddashboard.CmdDashboard(tpl, args.version)
         cmd.run()
     elif args.command == 'get':
         arr = [
@@ -163,6 +169,7 @@ def main() -> None:
         if args.get in arr:
             tpl = templates.Templates(dest_dir=args.directory)
             cmd = cmdget.CmdGet(tpl)
+            print(args)
             cmd.get(args.get)
         else:
             parser_get.print_usage()

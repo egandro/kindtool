@@ -3,9 +3,11 @@ from kindtool import __version__, runner, templates, kindfile
 import os
 
 class CmdDashboard:
-    def __init__(self, tpl: templates.Templates) -> None:
+    def __init__(self, tpl: templates.Templates, version: str) -> None:
         self._tpl = tpl
-        self._kindfile = kindfile.Kindfile(tpl)
+        inject = {}
+        inject["dashboard_version"] = version
+        self._kindfile = kindfile.Kindfile(tpl, inject)
         self._runner = runner.Runner()
 
     def run(self) -> None:

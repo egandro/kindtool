@@ -2,15 +2,16 @@ from configparser import ConfigParser
 from itertools import chain
 import os
 from subprocess import check_output
-from typing import Any, Dict
+from typing import Dict
 
 from kindtool import __version__, templates
 
 class Kindfile:
-    def __init__(self, tpl: templates.Templates) -> None:
+    def __init__(self, tpl: templates.Templates, inject: Dict[str, str] = {}) -> None:
         self._tpl = tpl
         self._cfg = ClusterConfig(tpl)
         self._data = None
+        self._inject = inject
 
     def throw_if_no_kindfile_found(self) -> None:
         kind_filename = self._tpl.get_kindfile()
@@ -19,7 +20,7 @@ class Kindfile:
 
     def data(self) -> Dict[str, str]:
         if not self._data:
-            self._cfg.parse()
+            self._cfg.parse(self._inject)
             self._data = self._cfg.data()
         return self._data
 
@@ -90,13 +91,18 @@ class ClusterConfig:
         self._tpl = tpl
         self._section = "dummy_section"
 
-    def parse(self) -> None:
+    def parse(self, inject: Dict[str, str] = {}) -> None:
         self._parser = ConfigParser()
 
         # https://stackoverflow.com/questions/2885190/using-configparser-to-read-a-file-without-section-name
         with open(self._tpl.get_kindfile()) as stream:
             stream = chain((f"[{self._section}]",), stream)
             self._parser.read_file(stream)
+
+        # inject data not in Kindfile
+        for key in inject:
+            value = inject[key]
+            self._parser.set(self._section, key, value)
 
         # patch a few things
         self._update_api_server_address()

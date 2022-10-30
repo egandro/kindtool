@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TOKEN_FILE="{{config_dir}}/token"
-DASHBOARD_VERSION=2.6.1 # TODO: make this a kindtool / Kindfile parameter
+DASHBOARD_VERSION="{{dashboard_version}}""
 
 {% if local_kubeconfig -%}
 export KUBECONFIG={{config_dir}}/config
