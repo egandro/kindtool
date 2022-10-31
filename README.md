@@ -70,3 +70,8 @@ $ kindtool dashboard
 # can be used as export KUBECONFIG=$(kindfile get kubeconfig)
 $ kindtool get kubeconfig
 ```
+
+
+## Examples
+
+https://github.com/egandro/kindtool-examples
