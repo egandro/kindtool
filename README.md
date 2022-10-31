@@ -43,6 +43,11 @@ sudo mv ./kind /usr/local/bin/kind
 $ pip3 install kindtool
 ```
 
+### Kubectl installation
+
+- Linux: https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+- Windows: https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/
+
 ## Workflow
 
 ```
