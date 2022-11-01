@@ -19,7 +19,7 @@ teplate_dir=./my_templates
 
 - implement "status" command
 
-- add a nice common way to wait for pods, deployments, services etc. the bash scripts are a mess and trial/error based
+- add a nice common way to wait for pods, deployments, services, service account, etc. the bash scripts are a mess and trial/error based
 
 ## Application support
 
