@@ -33,3 +33,5 @@ class CmdGet:
                 value = f"localhost:{self._kindfile.get_raw('internal_registry_docker_port')}"
         else:
             raise NotImplementedError(f"key '{key}' not implemented")
+
+        print(value)
