@@ -69,7 +69,8 @@ setup(
     python_requires=">=3.7, <4",
     install_requires=[
         "argparse",
-        "Jinja2"
+        "Jinja2",
+        "pyyaml"
     ],
     extras_require={  # Optional
         "dev": ["check-manifest"],
