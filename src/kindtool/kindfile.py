@@ -137,25 +137,25 @@ class ClusterConfig:
         return self._data
 
     def get(self, key: str, default: str = "") -> str:
-        if key in self._data.values():
+        if key in self._data:
             return self._data[key]
         self._data[key] = default
         return self._data[key]
 
     def getboolean(self, key: str, default: bool = False) -> bool:
-        if key in self._data.values():
+        if key in self._data:
             return self._data[key]
         self._data[key] = default
         return self._data[key]
 
     def getint(self, key: str, default: int = 0) -> int:
-        if key in self._data.values():
+        if key in self._data:
             return self._data[key]
         self._data[key] = default
         return self._data[key]
 
     def getfloat(self, key: str, default: float = 0) -> float:
-        if key in self._data.values():
+        if key in self._data:
             return self._data[key]
         self._data[key] = default
         return self._data[key]
