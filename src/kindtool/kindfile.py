@@ -1,8 +1,7 @@
-from configparser import ConfigParser
-from itertools import chain
+import yaml
 import os
 from subprocess import check_output
-from typing import Dict
+from typing import Any, Dict
 
 from kindtool import __version__, templates
 
@@ -16,7 +15,7 @@ class Kindfile:
     def throw_if_no_kindfile_found(self) -> None:
         kind_filename = self._tpl.get_kindfile()
         if not os.path.exists(kind_filename):
-            raise FileNotFoundError(f"Kindfile not found {kind_filename}")
+            raise FileNotFoundError(f"kindfile.yaml not found {kind_filename}")
 
     def data(self) -> Dict[str, str]:
         if not self._data:
@@ -89,20 +88,17 @@ class Kindfile:
 class ClusterConfig:
     def __init__(self, tpl: templates.Templates) -> None:
         self._tpl = tpl
-        self._section = "dummy_section"
+        self._data = {}
 
-    def parse(self, inject: Dict[str, str] = {}) -> None:
-        self._parser = ConfigParser()
+    def parse(self, inject: Dict[str, Any] = {}) -> None:
 
-        # https://stackoverflow.com/questions/2885190/using-configparser-to-read-a-file-without-section-name
-        with open(self._tpl.get_kindfile()) as stream:
-            stream = chain((f"[{self._section}]",), stream)
-            self._parser.read_file(stream)
+        with open(self._tpl.get_kindfile(), "r") as stream:
+            self._data = yaml.safe_load(stream)
 
-        # inject data not in Kindfile
+        # inject data not in kindfile.yaml
         for key in inject:
             value = inject[key]
-            self._parser.set(self._section, key, value)
+            self._data[key] = value
 
         # patch a few things
         self._update_api_server_address()
@@ -113,74 +109,60 @@ class ClusterConfig:
             self._update_mount_dir()
 
         key = "cluster_name"
-        self._parser.set(self._section, key, self.get(key, "kind"))
+        self._data[key] = self.get(key, "kind")
 
         key = "internal_registry"
         if self.getboolean(key):
             key = "internal_registry_docker_name"
-            self._parser.set(self._section, key,
-                self.get(key, self.get("cluster_name") + "-registry")
-            )
+            self._data[key] = self._data["cluster_name"]  + "-registry"
             key = "internal_registry_docker_port"
-            self._parser.set(self._section, key, str(self.getint(key, 5001)))
+            self._data[key] = self.getint(key, 5001)
 
         key = "ingress"
         if self.getboolean(key):
             key = "ingress_http_port"
-            self._parser.set(self._section, key, str(self.getint(key, 8000)))
+            self._data[key] = self.getint(key, 8000)
             key = "ingress_https_port"
-            self._parser.set(self._section, key, str(self.getint(key, 8443)))
+            self._data[key] = self.getint(key, 8443)
 
         key = "worker_nodes"
-        self._parser.set(self._section, key, str(self.getint(key, 0)))
+        self._data[key] = self.getint(key, 0)
 
-        # inject out version
-        self._parser.set(self._section, "kindtool_version", __version__)
+        # inject our version
+        key = "kindtool_version"
+        self._data[key] = __version__
 
 
-    def data(self) -> dict[str, str]:
-        map = {}
-
-        # the ConfigParser gives us a list of tuples
-        for item in self._parser.items(self._section):
-            k = item[0]
-            v = item[1] # this might be a type
-            if v.isnumeric():
-                v = int(v)
-            elif v.upper() == "TRUE":
-                v = True
-            elif v.upper() == "FALSE":
-                v = False
-            map[k] = v
-
-        return map
+    def data(self) -> dict[str, Any]:
+        return self._data
 
     def get(self, key: str, default: str = "") -> str:
-        try:
-            res = self._parser.get(self._section, key)
-            if not res:
-                res = default
-            return res
-        except Exception:
-            return default
+        if key in self._data:
+            if self._data[key] != None and str(self._data[key]).lower() != "none":
+                return self._data[key]
+        self._data[key] = default
+        return self._data[key]
 
     def getboolean(self, key: str, default: bool = False) -> bool:
-        try:
-            return self._parser.getboolean(self._section, key)
-        except Exception:
-            return default
+        if key in self._data:
+            if self._data[key] != None and str(self._data[key]).lower() != "none":
+                return self._data[key]
+        self._data[key] = default
+        return self._data[key]
 
     def getint(self, key: str, default: int = 0) -> int:
-        try:
-            return self._parser.getint(self._section, key)
-        except Exception:
-            return default
+        if key in self._data:
+            if self._data[key] != None and str(self._data[key]).lower() != "none":
+                return self._data[key]
+        self._data[key] = default
+        return self._data[key]
 
     def getfloat(self, key: str, default: float = 0) -> float:
-        try:
-            return self._parser.getfloat(self._section, key)
-        except Exception:
-            return default
+        if key in self._data:
+            if self._data[key] != None and str(self._data[key]).lower() != "none":
+                return self._data[key]
+        self._data[key] = default
+        return self._data[key]
 
     def _update_config_dir(self) -> str:
         key = "config_dir"
@@ -188,23 +170,23 @@ class ClusterConfig:
         if not value:
             value = os.path.realpath(os.path.join(self._tpl.get_dest_dir(), ".kind/config"))
         #value = os.path.abspath(value)
-        self._parser.set(self._section, key, value)
+        self._data[key] = value
 
     def _update_mount_dir(self) -> str:
         key = "mount_dir"
         value = self.get(key, "")
         if not value:
             value = os.path.realpath(os.path.join(self._tpl.get_dest_dir(), ".kind/data"))
-            self._parser.set(self._section, key, value)
+            self._data[key] = value
             # this enforces our automatic generated dir to be 755 and our user
             os.makedirs(value, exist_ok=True)
 
-    def _update_api_server_address(self) -> str:
+    def _update_api_server_address(self) -> None:
         key = "api_server_address"
         value = self.get(key, "")
         if not value:
-            ip = self._get_ip()
-            self._parser.set(self._section, key, ip)
+            value = self._get_ip()
+            self._data[key] = value
 
     def _get_ip(self):
         ip = "127.0.0.1"

@@ -15,6 +15,7 @@ Requirements:
 - python3
 - kind
 - kubectl
+- optional: helm
 
 ### Kind installation
 
@@ -42,6 +43,15 @@ sudo mv ./kind /usr/local/bin/kind
 ```
 $ pip3 install kindtool
 ```
+
+### Kubectl installation
+
+- Linux: https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+- Windows: https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/
+
+# Helm installation
+
+- https://helm.sh/docs/intro/install/
 
 ## Workflow
 

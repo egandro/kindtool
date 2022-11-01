@@ -20,7 +20,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="kindtool",  # Required
-    version="0.0.3",  # Required
+    version="0.0.4",  # Required
     description="Generator for kind k8s clusters",  # Optional
     long_description=long_description,  # Optional
     long_description_content_type="text/markdown",  # Optional (see note above)
@@ -69,7 +69,8 @@ setup(
     python_requires=">=3.7, <4",
     install_requires=[
         "argparse",
-        "Jinja2"
+        "Jinja2",
+        "pyyaml"
     ],
     extras_require={  # Optional
         "dev": ["check-manifest"],

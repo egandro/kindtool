@@ -8,6 +8,6 @@ class CmdInit:
     def create_content(self) -> None:
         kind_filename = self._tpl.get_kindfile()
         if os.path.exists(kind_filename):
-            raise FileExistsError(f"Kindfile exists {kind_filename}")
+            raise FileExistsError(f"kindfile.yaml exists {kind_filename}")
 
-        self._tpl.copy_file(tpl_filename="Kindfile")
+        self._tpl.copy_file(tpl_filename="kindfile.yaml")

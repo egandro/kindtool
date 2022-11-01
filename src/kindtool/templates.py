@@ -20,7 +20,7 @@ class Templates:
         return tpl_dir
 
     def get_kindfile(self) -> str:
-        kindfile = os.path.abspath(os.path.join(self._dest_dir, 'Kindfile'))
+        kindfile = os.path.abspath(os.path.join(self._dest_dir, 'kindfile.yaml'))
         return kindfile
 
     def get_dest_dir(self) -> str:

@@ -28,8 +28,12 @@ class CmdGet:
             value = f"{self._kindfile.has_metallb()}"
         elif key == 'mountpoints':
             value = self._kindfile.get_raw('mountpoints')
+        elif key == 'api_server_address':
+            value = self._kindfile.get_raw('api_server_address')
         elif key == 'internal_registry_prefix':
             if self._kindfile.has_internal_registry():
                 value = f"localhost:{self._kindfile.get_raw('internal_registry_docker_port')}"
         else:
             raise NotImplementedError(f"key '{key}' not implemented")
+
+        print(value)
