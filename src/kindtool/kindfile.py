@@ -177,12 +177,13 @@ class ClusterConfig:
             # this enforces our automatic generated dir to be 755 and our user
             os.makedirs(value, exist_ok=True)
 
-    def _update_api_server_address(self) -> str:
+    def _update_api_server_address(self) -> None:
         key = "api_server_address"
         value = self.get(key, "")
         if not value:
             value = self._get_ip()
             self._data[key] = value
+        print("xxx: " + self._data[key])
 
     def _get_ip(self):
         ip = "127.0.0.1"
