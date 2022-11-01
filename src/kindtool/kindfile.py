@@ -181,7 +181,7 @@ class ClusterConfig:
         key = "api_server_address"
         value = self.get(key, "")
         if not value:
-            ip = self._get_ip()
+            value = self._get_ip()
             self._data[key] = value
 
     def _get_ip(self):
