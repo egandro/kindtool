@@ -183,7 +183,6 @@ class ClusterConfig:
         if not value:
             value = self._get_ip()
             self._data[key] = value
-        print("xxx: " + self._data[key])
 
     def _get_ip(self):
         ip = "127.0.0.1"
