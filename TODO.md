@@ -12,13 +12,14 @@ teplate_dir=./my_templates
 # $ kindtool dump_templates <dir>
 ```
 
-- Use yaml parser
 
 ## Features
 
 - add a way to detect the `main ip` (whatever that means) by a script. Currently a `hostname --all-ip-addresses` is used. That is not portable.
 
 - implement "status" command
+
+- add a nice common way to wait for pods, deployments, services etc. the bash scripts are a mess and trial/error based
 
 ## Application support
 
