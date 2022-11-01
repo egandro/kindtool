@@ -16,7 +16,7 @@ class Kindfile:
     def throw_if_no_kindfile_found(self) -> None:
         kind_filename = self._tpl.get_kindfile()
         if not os.path.exists(kind_filename):
-            raise FileNotFoundError(f"Kindfile not found {kind_filename}")
+            raise FileNotFoundError(f"kindfile.yaml not found {kind_filename}")
 
     def data(self) -> Dict[str, str]:
         if not self._data:
@@ -99,7 +99,7 @@ class ClusterConfig:
             stream = chain((f"[{self._section}]",), stream)
             self._parser.read_file(stream)
 
-        # inject data not in Kindfile
+        # inject data not in kindfile.yaml
         for key in inject:
             value = inject[key]
             self._parser.set(self._section, key, value)

@@ -6,7 +6,7 @@ def add_default_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument( '--directory', '-d', type=str,
         metavar='DIR',
         default='',
-        help="directory of Kindfile (default is current working directory)", required=False)
+        help="directory of kindfile.yaml (default is current working directory)", required=False)
 
 def main_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog=__app_name__)
@@ -16,7 +16,7 @@ def main_parser() -> argparse.ArgumentParser:
 
 def create_parser_init(parent: argparse.ArgumentParser) -> None:
     name = 'init'
-    help = 'create a new Kindfile'
+    help = 'create a new kindfile.yaml'
 
     parser = parent.add_parser(name, help=help)
     parser.add_argument( '--directory', '-d', type=str,

@@ -1,0 +1,27 @@
+# 'kind' is the default cluster name
+cluster_name: null
+# sets kubeconfig to $(kindfile_yaml_dir)/.kind/config/config
+# kind's behaviour is either to use $KUBECONFIG or $HOME/.kube/config
+local_kubeconfig: true
+internal_registry: false
+# <clustername>-registry is the default
+internal_registry_docker_name: null
+# 5001 is the default
+internal_registry_docker_port: 5001
+ingress: false
+ingress_http_port: 8000
+ingress_https_port: 8443
+# loadbalancer
+metallb: false
+# 0 = default of k8s/kind, you only get the controller
+worker_nodes: 0
+mountpoints: true
+# default is $(kindfile_yaml_dir)/.kind/data
+mount_dir: null
+# default is $(kindfile_yaml_dir)/.kind/config
+config_dir: null
+# default is main IP of the host
+# set back to 127.0.0.1 if you don't want this
+api_server_address: null
+# keep empty, if you want to have a randomized port
+api_server_port: null
