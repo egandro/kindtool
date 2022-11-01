@@ -95,9 +95,6 @@ class ClusterConfig:
         with open(self._tpl.get_kindfile(), "r") as stream:
             self._data = yaml.safe_load(stream)
 
-        print(f"{self._data}")
-        print(f"DEBUG REMOVE ME----------------------")
-
         # inject data not in kindfile.yaml
         for key in inject:
             value = inject[key]
