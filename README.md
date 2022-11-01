@@ -49,7 +49,7 @@ $ pip3 install kindtool
 - Linux: https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
 - Windows: https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/
 
-# Helm installation
+### Helm installation
 
 - https://helm.sh/docs/intro/install/
 
