@@ -144,19 +144,22 @@ class ClusterConfig:
 
     def getboolean(self, key: str, default: bool = False) -> bool:
         if key in self._data:
-            return self._data[key]
+            if self._data[key] != None and self._data[key] != "None":
+                return self._data[key]
         self._data[key] = default
         return self._data[key]
 
     def getint(self, key: str, default: int = 0) -> int:
         if key in self._data:
-            return self._data[key]
+            if self._data[key] != None and self._data[key] != "None":
+                return self._data[key]
         self._data[key] = default
         return self._data[key]
 
     def getfloat(self, key: str, default: float = 0) -> float:
         if key in self._data:
-            return self._data[key]
+            if self._data[key] != None and self._data[key] != "None":
+                return self._data[key]
         self._data[key] = default
         return self._data[key]
 
