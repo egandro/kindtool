@@ -45,9 +45,11 @@ ch = logging.StreamHandler()
 #fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 fmt = '%(asctime)s - %(filename)s:%(lineno)s - %(funcName)s - %(levelname)s - %(message)s'
 #fmt = "{\"time\": \"%(asctime)s\", \"level\": \"%(levelname)s\" \"message\": \"%(message)s\"}"
+#datefmt='%Y-%m-%d,%H:%M:%S %z'
+datefmt=None
 
 # create formatter
-formatter = logging.Formatter(datefmt='%Y-%m-%d,%H:%M:%S %z', fmt=fmt)
+formatter = logging.Formatter(datefmt=datefmt, fmt=fmt)
 
 # add formatter to ch
 ch.setFormatter(formatter)
