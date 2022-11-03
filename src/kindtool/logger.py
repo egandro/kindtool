@@ -57,9 +57,24 @@ ch.setLevel(logging.DEBUG) # level of this formater
 
 log.addHandler(ch)
 
-xxx = 123
-log.debug(f"Logging test... {xxx=}")
-log.info("The program is working as expected")
-log.warning("The program may not function properly")
-log.error("The program encountered an error")
-log.critical("The program crashed")
+
+
+def myfunc() -> None:
+    xxx = 123
+    log.debug(f"Logging test... {xxx=}")
+    log.info("The program is working as expected")
+    log.warning("The program may not function properly")
+    log.error("The program encountered an error")
+    log.critical("The program crashed")
+
+    try:
+        log.warning("crashing time...")
+        raise Exception("i crashed")
+    except Exception as ex:
+        #log.exception(f"oops {ex=}")
+        log.exception(ex)
+
+
+if __name__ == '__main__':
+    log.debug(f"App start")
+    myfunc()
