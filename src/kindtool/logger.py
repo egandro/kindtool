@@ -1,5 +1,6 @@
 # https://docs.python.org/3/howto/logging.html
 # https://signoz.io/docs/userguide/collect_logs_from_file/
+# https://docs.python.org/3/library/logging.handlers.html#logging.handlers.SocketHandler
 
 import logging
 import time
