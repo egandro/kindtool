@@ -67,6 +67,10 @@ def myfunc() -> None:
     log.error("The program encountered an error")
     log.critical("The program crashed")
 
+    log.debug("i am a debug...")
+    log.setLevel(logging.INFO)
+    log.debug("i am silent")
+
     try:
         log.warning("crashing time...")
         raise Exception("i crashed")
