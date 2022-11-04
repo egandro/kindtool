@@ -1,6 +1,7 @@
 # https://docs.python.org/3/howto/logging.html
 # https://signoz.io/docs/userguide/collect_logs_from_file/
 # https://docs.python.org/3/library/logging.handlers.html#logging.handlers.SocketHandler
+# https://stackoverflow.com/questions/28180159/how-do-i-can-format-exception-stacktraces-in-python-logging
 
 import logging
 import time
@@ -50,6 +51,21 @@ datefmt=None
 
 # create formatter
 formatter = logging.Formatter(datefmt=datefmt, fmt=fmt)
+
+# https://stackoverflow.com/questions/28180159/how-do-i-can-format-exception-stacktraces-in-python-logging
+class OneLineExceptionFormatter(logging.Formatter):
+    def formatException(self, exc_info):
+        result = super(OneLineExceptionFormatter, self).formatException(exc_info)
+        return repr(result) # or format into one line however you want to
+
+    def format(self, record):
+        s = super(OneLineExceptionFormatter, self).format(record)
+        if record.exc_text:
+            s = s.replace('\n', '\\n') + '|'
+        return s
+
+formatter = OneLineExceptionFormatter(datefmt=datefmt, fmt=fmt)
+
 
 # add formatter to ch
 ch.setFormatter(formatter)
