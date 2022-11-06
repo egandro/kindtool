@@ -79,11 +79,8 @@ setup(
 
     # If there are data files included in your packages that need to be
     # installed, specify them here.
-    #package_data={  # Optional
-    #    "sample": ["package_data.dat"],
-    #},
     package_data={
-        "kindtool": [ "templates/**", "templates/**/*"]
+        "kindtool": ["templates/**", "templates/**/*"]
     },
 
     # # https://stackoverflow.com/questions/27829754/include-entire-directory-in-python-setup-py-data-files
