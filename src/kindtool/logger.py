@@ -4,97 +4,41 @@
 # https://stackoverflow.com/questions/28180159/how-do-i-can-format-exception-stacktraces-in-python-logging
 
 import logging
-import time
+from typing import Any
 
-# logging.basicConfig(filename="./python.log", level=logging.DEBUG, datefmt='%Y-%m-%d,%H:%M:%S %z',
-#                     format="{\"time\": \"%(asctime)s\", \"message\": \"%(message)s\"}", filemode="a")
+level: any = -1
+loggers: any = []
 
-# if __name__ == '__main__':
-#     while True:
-#         logging.debug("Logging test...")
-#         logging.info("The program is working as expected")
-#         logging.warning("The program may not function properly")
-#         logging.error("The program encountered an error")
-#         logging.critical("The program crashed")
-#         time.sleep(2)
+def setLevel(lev: Any) -> None:
+    global level
+    global loggers
+    level = lev
 
-# # logger = logging.getLogger(__name__)
-# # create logger
-# logger = logging.getLogger('simple_example')
-# logger.setLevel(logging.DEBUG)
+    if loggers:
+        for log in loggers:
+            log.setLevel(lev)
+            if log.hasHandlers():
+                for handler in log.handlers:
+                    handler.setLevel(lev)
 
-# # create console handler and set level to debug
-# ch = logging.StreamHandler()
-# ch.setLevel(logging.DEBUG)
+def getLogger(name: str) -> logging.Logger:
+    log = logging.getLogger(name)
+    #ch = logging.NullHandler()
+    ch = logging.StreamHandler()
+    if level >0:
+        log.setLevel(level)
 
-# # create formatter
-# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    fmt = '%(asctime)s - %(filename)s:%(lineno)s - %(funcName)s - %(levelname)s - %(message)s'
+    datefmt=None
 
-# # add formatter to ch
-# ch.setFormatter(formatter)
+    # create formatter
+    formatter = logging.Formatter(datefmt=datefmt, fmt=fmt)
 
-# # add ch to logger
-# logger.addHandler(ch)
+    # add formatter to ch
+    ch.setFormatter(formatter)
+    ch.setLevel(level)
+    log.addHandler(ch)
 
+    loggers.append(log)
 
-log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
-
-ch = logging.StreamHandler()
-#ch = logging.NullHandler()
-
-#fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-fmt = '%(asctime)s - %(filename)s:%(lineno)s - %(funcName)s - %(levelname)s - %(message)s'
-#fmt = "{\"time\": \"%(asctime)s\", \"level\": \"%(levelname)s\" \"message\": \"%(message)s\"}"
-#datefmt='%Y-%m-%d,%H:%M:%S %z'
-datefmt=None
-
-# create formatter
-formatter = logging.Formatter(datefmt=datefmt, fmt=fmt)
-
-# https://stackoverflow.com/questions/28180159/how-do-i-can-format-exception-stacktraces-in-python-logging
-class OneLineExceptionFormatter(logging.Formatter):
-    def formatException(self, exc_info):
-        result = super(OneLineExceptionFormatter, self).formatException(exc_info)
-        return repr(result) # or format into one line however you want to
-
-    def format(self, record):
-        s = super(OneLineExceptionFormatter, self).format(record)
-        if record.exc_text:
-            s = s.replace('\n', '\\n') + '|'
-        return s
-
-formatter = OneLineExceptionFormatter(datefmt=datefmt, fmt=fmt)
-
-
-# add formatter to ch
-ch.setFormatter(formatter)
-ch.setLevel(logging.DEBUG) # level of this formater
-
-log.addHandler(ch)
-
-
-
-def myfunc() -> None:
-    xxx = 123
-    log.debug(f"Logging test... {xxx=}")
-    log.info("The program is working as expected")
-    log.warning("The program may not function properly")
-    log.error("The program encountered an error")
-    log.critical("The program crashed")
-
-    log.debug("i am a debug...")
-    log.setLevel(logging.INFO)
-    log.debug("i am silent")
-
-    try:
-        log.warning("crashing time...")
-        raise Exception("i crashed")
-    except Exception as ex:
-        #log.exception(f"oops {ex=}")
-        log.exception(ex)
-
-
-if __name__ == '__main__':
-    log.debug(f"App start")
-    myfunc()
+    return log

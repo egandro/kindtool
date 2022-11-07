@@ -3,6 +3,9 @@ import os
 
 from typing import List
 
+from kindtool import logger
+
+log = logger.getLogger(__name__)
 
 class Runner:
     def __init__(self) -> None:

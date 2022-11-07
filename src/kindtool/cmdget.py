@@ -1,5 +1,7 @@
-from kindtool import templates, kindfile
+from kindtool import logger, templates, kindfile
 import os
+
+log = logger.getLogger(__name__)
 
 class CmdGet:
     def __init__(self, tpl: templates.Templates) -> None:

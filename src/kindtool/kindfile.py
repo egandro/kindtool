@@ -3,7 +3,9 @@ import os
 from subprocess import check_output
 from typing import Any, Dict
 
-from kindtool import __version__, templates
+from kindtool import __version__, logger, templates
+
+log = logger.getLogger(__name__)
 
 class Kindfile:
     def __init__(self, tpl: templates.Templates, inject: Dict[str, str] = {}) -> None:

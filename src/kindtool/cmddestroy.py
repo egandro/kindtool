@@ -1,6 +1,6 @@
-from typing import Any, Dict
+from kindtool import __version__, logger, runner, templates, kindfile
 
-from kindtool import __version__, runner, templates, kindfile
+log = logger.getLogger(__name__)
 
 class CmdDestroy:
     def __init__(self, tpl: templates.Templates) -> None:

@@ -1,6 +1,6 @@
-from kindtool import __version__, runner, templates, kindfile
+from kindtool import __version__, logger, runner, templates, kindfile
 
-import os
+log = logger.getLogger(__name__)
 
 class CmdDashboard:
     def __init__(self, tpl: templates.Templates, version: str) -> None:

@@ -4,6 +4,10 @@ from jinja2 import Environment, FileSystemLoader
 import os
 import shutil
 
+from kindtool import logger
+
+log = logger.getLogger(__name__)
+
 class Templates:
     def __init__(self, dest_dir: Path) -> None:
         self._tpl_path = self._detect_template_path()

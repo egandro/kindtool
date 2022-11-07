@@ -1,12 +1,17 @@
 import argparse
+import logging
 
-from kindtool import __app_name__, __version__, cmdinit, cmdget, cmdup, cmddestroy, cmddashboard, cmdshell, templates
+from kindtool import __app_name__, __version__, cmdinit, cmdget, cmdup, cmddestroy, cmddashboard, cmdshell, templates, logger
 
 def add_default_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument( '--directory', '-d', type=str,
         metavar='DIR',
         default='',
         help="directory of kindfile.yaml (default is current working directory)", required=False)
+    parser.add_argument( '--verbose', type=int,
+        metavar='LEVEL',
+        default=0,
+        help="verbosity level: 0 = none, 1 = info, 2 = debug", required=False)
 
 def main_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog=__app_name__)
@@ -19,10 +24,7 @@ def create_parser_init(parent: argparse.ArgumentParser) -> None:
     help = 'create a new kindfile.yaml'
 
     parser = parent.add_parser(name, help=help)
-    parser.add_argument( '--directory', '-d', type=str,
-        metavar='DIR',
-        default='',
-        help="destination directory (default is current working directory)", required=False)
+    add_default_arguments(parser)
 
 def create_parser_up(parent: argparse.ArgumentParser) -> None:
     name = 'up'
@@ -177,6 +179,13 @@ def main() -> None:
     create_parser_get_internal_registry_prefix(subparser)
 
     args = parser.parse_args()
+
+    if args.command:
+        # loglevel
+        if args.verbose == 1:
+            logger.setLevel(logging.INFO)
+        if args.verbose == 2:
+            logger.setLevel(logging.DEBUG)
 
     if args.command == 'init':
         tpl = templates.Templates(dest_dir=args.directory)
