@@ -23,7 +23,8 @@ def setLevel(lev: Any) -> None:
 
 def getLogger(name: str) -> logging.Logger:
     log = logging.getLogger(name)
-    #ch = logging.NullHandler()
+    # todo only set StreamHanlder if loglevel was set
+    # ch = logging.NullHandler()
     ch = logging.StreamHandler()
     if level >0:
         log.setLevel(level)
