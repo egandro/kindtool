@@ -1,7 +1,7 @@
 import argparse
 import logging
 
-from kindtool import __app_name__, __version__, cmdinit, cmdget, cmdup, cmddestroy, cmddashboard, cmdshell, templates, logger
+from kindtool import __app_name__, __version__, cmdappdev, cmdinit, cmdget, cmdup, cmddestroy, cmddashboard, cmdshell, templates, logger
 
 def add_default_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument( '--directory', '-d', type=str,
@@ -154,6 +154,13 @@ def create_parser_get_internal_registry_prefix(parent: argparse.ArgumentParser) 
     parser = parent.add_parser(name, help=help)
     add_default_arguments(parser)
 
+def create_parser_get_app_definition(parent: argparse.ArgumentParser) -> None:
+    name = 'app_definition'
+    help = 'returns a list of all app-definitions of a kindfile'
+
+    parser = parent.add_parser(name, help=help)
+    add_default_arguments(parser)
+
 def main() -> None:
     parser = main_parser()
     subparser = parser.add_subparsers(dest='command')
@@ -166,6 +173,7 @@ def main() -> None:
 
     # 'get' has subcommands
     parser_get = subparser.add_parser('get', help='get useful status information of the cluster')
+    add_default_arguments(parser_get)
     subparser = parser_get.add_subparsers(dest='get')
 
     create_parser_get_name(subparser)
@@ -177,6 +185,8 @@ def main() -> None:
     create_parser_get_mountpoints(subparser)
     create_parser_get_api_server_address(subparser)
     create_parser_get_internal_registry_prefix(subparser)
+    create_parser_get_app_definition(subparser)
+
 
     args = parser.parse_args()
 
@@ -186,6 +196,8 @@ def main() -> None:
             logger.setLevel(logging.INFO)
         if args.verbose == 2:
             logger.setLevel(logging.DEBUG)
+
+    log = logger.getLogger(__file__)
 
     if args.command == 'init':
         tpl = templates.Templates(dest_dir=args.directory)
@@ -214,6 +226,7 @@ def main() -> None:
             cmd.create_or_attach()
     elif args.command == 'get':
         arr = [
+            # TODO: make kebab case
             'name','kubeconfig',
             'ingress', 'ingress_http_port', 'ingress_https_port',
             'metallb',
@@ -225,6 +238,10 @@ def main() -> None:
             tpl = templates.Templates(dest_dir=args.directory)
             cmd = cmdget.CmdGet(tpl)
             cmd.get(args.get)
+        elif args.get == 'app_definition':
+            tpl = templates.Templates(dest_dir=args.directory)
+            cmd = cmdappdev.CmdAppDefinition(tpl)
+            cmd.show_app_definition()
         else:
             parser_get.print_usage()
     else:
