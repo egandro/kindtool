@@ -23,22 +23,19 @@ def create_parser_init(parent: argparse.ArgumentParser) -> None:
     name = 'init'
     help = 'create a new kindfile.yaml'
 
-    parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
+    parent.add_parser(name, help=help)
 
 def create_parser_up(parent: argparse.ArgumentParser) -> None:
     name = 'up'
     help = 'start a cluster'
 
-    parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
+    parent.add_parser(name, help=help)
 
 def create_parser_destroy(parent: argparse.ArgumentParser) -> None:
     name = 'destroy'
     help = 'stops a cluster'
 
     parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
     parser.add_argument('--force','-f', action='store_true',
         help="force the deletion")
 
@@ -46,8 +43,7 @@ def create_parser_status(parent: argparse.ArgumentParser) -> None:
     name = 'status'
     help = 'prints status information of the cluster'
 
-    parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
+    parent.add_parser(name, help=help)
 
 def create_parser_dashboard(parent: argparse.ArgumentParser) -> None:
     name = 'dashboard'
@@ -55,7 +51,6 @@ def create_parser_dashboard(parent: argparse.ArgumentParser) -> None:
     version = '2.6.1'
 
     parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
 
     parser.add_argument( '--version', '-v', type=str,
         metavar='VER',
@@ -69,7 +64,6 @@ def create_parser_shell(parent: argparse.ArgumentParser) -> None:
     image = 'ubuntu:22.04'
 
     parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
 
     parser.add_argument( '--pod', '-p', type=str,
         metavar='POD',
@@ -95,74 +89,65 @@ def create_parser_get_name(parent: argparse.ArgumentParser) -> None:
     name = 'name'
     help = 'name of the cluster'
 
-    parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
+    parent.add_parser(name, help=help)
 
 def create_parser_get_kubeconfig(parent: argparse.ArgumentParser) -> None:
     name = 'kubeconfig'
     help = 'returns the directory containing the kubeconfig of the cluster'
 
-    parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
+    parent.add_parser(name, help=help)
 
 def create_parser_get_ingress(parent: argparse.ArgumentParser) -> None:
     name = 'ingress'
     help = 'returns True or False if ingress feature is enabled'
 
-    parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
+    parent.add_parser(name, help=help)
 
 def create_parser_get_ingress_http_port(parent: argparse.ArgumentParser) -> None:
     name = 'ingress_http_port'
     help = 'returns the ingress http port'
 
-    parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
+    parent.add_parser(name, help=help)
 
 def create_parser_get_ingress_https_port(parent: argparse.ArgumentParser) -> None:
     name = 'ingress_https_port'
     help = 'returns the ingress https port'
 
-    parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
+    parent.add_parser(name, help=help)
 
 def create_parser_get_metallb(parent: argparse.ArgumentParser) -> None:
     name = 'metallb'
     help = 'returns True or False if metallb feature is enabled'
 
-    parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
+    parent.add_parser(name, help=help)
 
 def create_parser_get_mountpoints(parent: argparse.ArgumentParser) -> None:
     name = 'mountpoints'
     help = 'returns True or False if the cluster has local persistant storage'
 
-    parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
+    parent.add_parser(name, help=help)
 
 def create_parser_get_api_server_address(parent: argparse.ArgumentParser) -> None:
     name = 'api_server_address'
     help = 'returns the ip address of the k8s API server'
 
-    parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
+    parent.add_parser(name, help=help)
 
 def create_parser_get_internal_registry_prefix(parent: argparse.ArgumentParser) -> None:
     name = 'internal_registry_prefix'
     help = 'returns the prefix internal docker registry if internal_registry is enabled'
 
-    parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
+    parent.add_parser(name, help=help)
 
 def create_parser_get_app_definition(parent: argparse.ArgumentParser) -> None:
     name = 'app_definition'
     help = 'returns a list of all app-definitions of a kindfile'
 
-    parser = parent.add_parser(name, help=help)
-    add_default_arguments(parser)
+    parent.add_parser(name, help=help)
 
 def main() -> None:
     parser = main_parser()
+    add_default_arguments(parser)
     subparser = parser.add_subparsers(dest='command')
     create_parser_init(subparser)
     create_parser_up(subparser)
@@ -173,7 +158,6 @@ def main() -> None:
 
     # 'get' has subcommands
     parser_get = subparser.add_parser('get', help='get useful status information of the cluster')
-    add_default_arguments(parser_get)
     subparser = parser_get.add_subparsers(dest='get')
 
     create_parser_get_name(subparser)

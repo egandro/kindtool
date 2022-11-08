@@ -11,8 +11,8 @@ class CmdAppDefinition:
     def show_app_definition(self) -> None:
         self._kindfile.throw_if_no_kindfile_found()
 
-        value=''
+        data = self._kindfile.app_definitons()
 
-        raise NotImplementedError(f"not implemented")
+        # raise NotImplementedError(f"not implemented")
 
-        print(value)
+        print('nop')

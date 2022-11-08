@@ -87,6 +87,18 @@ class Kindfile:
         res = data[key]
         return res
 
+    def app_definitons(self) -> list[object]:
+        data = self.data()
+        key = 'app-definition'
+
+        if key not in data:
+            return None
+
+        values = data[key]
+        log.debug(f"app definitions: {values}")
+
+        return None
+
 class ClusterConfig:
     def __init__(self, tpl: templates.Templates) -> None:
         self._tpl = tpl
@@ -203,3 +215,7 @@ class ClusterConfig:
             # bad luck...
             pass
         return ip
+
+class AppDefinition:
+    def __init__(self, data:  Dict[str, str]) -> None:
+        self._data = data
